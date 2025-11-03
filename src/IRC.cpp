@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRC.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcsilv <marcsilv@42.student.fr>          +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 15:29:52 by marcsilv          #+#    #+#             */
-/*   Updated: 2025/11/03 15:54:45 by marcsilv         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:44:10 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,23 @@
 #include <cstdlib>
 #include <stdexcept>
 #include <string>
+
+IRC::IRC(void) {
+	/*std::cout << "IRC's default constructor called"<< std::endl;*/
+}
+
+IRC::IRC(const IRC &other) {
+	/*std::cout << "IRC's copy constructor operator called" << std::endl;*/
+	*this = other;
+}
+
+IRC::IRC(const std::string &port, const std::string &password): _password(password) {
+	_validation.validatePortNumber(port);
+}
+
+IRC::~IRC(void) {
+	/*std::cout << "IRC's default destructor called" << std::endl;*/
+}
 
 IRC &IRC::operator=(const IRC &other) {
 	/*std::cout << "IRC's Copy assignment operator called" << std::endl;*/
@@ -23,22 +40,6 @@ IRC &IRC::operator=(const IRC &other) {
 		this->_password = other._password;
 	}
 	return (*this);
-}
-
-IRC::IRC(const IRC &other) {
-	/*std::cout << "IRC's copy constructor operator called" << std::endl;*/
-	*this = other;
-}
-
-IRC::IRC(void) {
-	/*std::cout << "IRC's default constructor called"<< std::endl;*/
-}
-IRC::~IRC(void) {
-	/*std::cout << "IRC's default destructor called" << std::endl;*/
-}
-
-IRC::IRC(const std::string &port, const std::string &password): _password(password) {
-	_validation.validatePortNumber(port);
 }
 
 void	IRC::run(void) {
