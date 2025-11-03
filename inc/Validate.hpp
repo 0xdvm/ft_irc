@@ -1,29 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Validate.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: marcsilv <marcsilv@42.student.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/01 19:28:42 by marcsilv          #+#    #+#             */
-/*   Updated: 2025/11/03 15:49:52 by marcsilv         ###   ########.fr       */
+/*   Created: 2025/11/03 15:09:00 by marcsilv          #+#    #+#             */
+/*   Updated: 2025/11/03 15:26:48 by marcsilv         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/IRC.hpp"
-#include <cstdlib>
-#include <iostream>
-#include <stdexcept>
+#ifndef VALIDATE_HPP
+# define VALIDATE_HPP
 
-int	main(int ac, char **av) {
-	try {
-		if (ac != 3)
-			throw std::runtime_error ("Wrong args\nRun: ./ircserv <port> <password>\n");
-		IRC irc(av[1], av[2]);
-        irc.run();
-	} catch (const std::exception &e) {
-        std::cerr << "Error: " << e.what() << "\n";
-        return 1;
-    }
-}
+# include <string>
+# include <iostream>
+# include <cctype>
 
+class Validate {
+
+	public:
+
+		Validate();
+		Validate(const Validate &);
+		Validate &operator=(const Validate &);
+		~Validate();
+
+		bool	isAllNums(const std::string &nums);
+		void	validatePortNumber(const std::string &port);
+	
+	private:
+		
+};
+
+#endif // !VALIDATE_HPP
