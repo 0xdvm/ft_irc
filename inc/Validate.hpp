@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Validate.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marcsilv <marcsilv@42.student.fr>          +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 15:09:00 by marcsilv          #+#    #+#             */
-/*   Updated: 2025/11/03 15:26:48 by marcsilv         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:44:49 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,9 @@ class Validate {
 
 		Validate();
 		Validate(const Validate &);
-		Validate &operator=(const Validate &);
 		~Validate();
+		Validate &operator=(const Validate &);
 
-		bool	isAllNums(const std::string &nums);
 		void	validatePortNumber(const std::string &port);
 	
 	private:
