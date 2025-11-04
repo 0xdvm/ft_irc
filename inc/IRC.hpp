@@ -30,9 +30,9 @@ class IRC {
 	
 	private:
 		
-		Validate	_validation;
-		unsigned short		_port;
-		std::string	_password;
+		Validate		_validation;
+		unsigned short	_port;
+		std::string		_password;
 
 };
 
