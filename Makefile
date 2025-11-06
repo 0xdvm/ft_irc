@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: codespace <codespace@student.42.fr>        +#+  +:+       +#+         #
+#    By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/08 12:51:48 by marcsilv          #+#    #+#              #
-#    Updated: 2025/11/03 15:43:02 by marcsilv         ###   ########.fr        #
+#    Updated: 2025/11/06 18:02:47 by dvemba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,8 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 INC_DIR		= inc/
 
-SRC_FILES	= main.cpp IRC.cpp Validate.cpp
-HEADERS		= IRC.hpp Validate.hpp
+SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp
+HEADERS		= IRC.hpp Validate.hpp Server.hpp
 
 SRC			= $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ			= $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))
