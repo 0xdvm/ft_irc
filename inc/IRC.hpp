@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 15:06:24 by marcsilv          #+#    #+#             */
-/*   Updated: 2025/11/03 17:44:54 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/06 16:52:07 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 
 class IRC {
 
+	private:
+		
+		Validate		_validation;
+		std::string	_port;
+		std::string		_password;
+		
 	public:
 		
 		IRC(void);
@@ -28,12 +34,6 @@ class IRC {
 
 		void		run(void);
 	
-	private:
-		
-		Validate		_validation;
-		unsigned short	_port;
-		std::string		_password;
-
 };
 
 #endif // !IRC_HPP
