@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/06 18:03:31 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/07 12:42:05 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void Server::run_server(){
     memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = INADDR_ANY;
+    hints.ai_flags = AI_PASSIVE;
     
     getaddrinfo(NULL, this->_port.c_str(), &hints, &res);
     
@@ -65,7 +65,7 @@ void Server::run_server(){
         close(this->socket_fd);
     }
 
-    if (listen(this->socket_fd, 10) < 0){
+    if (listen(this->socket_fd, 128) < 0){
         throw std::runtime_error("listen");
     }
     freeaddrinfo(res);
