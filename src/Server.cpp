@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 18:19:28 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/09 22:31:22 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <signal.h>
 #include <fcntl.h>
 #include <sys/epoll.h>
+#include <errno.h>
+#include <stdio.h>
 
 Server::Server(){}
 
@@ -110,9 +112,33 @@ void Server::run_server(){
         for (int i = 0; i < n; i++){
             // Se o evento foi feito para o servidor (quer dizer que um cliente tentou se conectar).
             if (events[i].data.fd == this->server_fd){
-                //continue...
+                int client_fd = accept(this->server_fd, NULL, NULL);
+                if (client_fd < 0){
+                    if (errno == EWOULDBLOCK || errno == EAGAIN) {
+                        // Não há clientes ainda, continue o loop
+                        continue;
+                    } else {
+                        // Algum outro erro sério aconteceu
+                        perror("accept");
+                        continue;
+                    }
+                }
+                struct epoll_event client_ev;
+                client_ev.data.fd = client_fd;
+                client_ev.events = EPOLLIN;
+                epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &client_ev);
+
+                //Criando um objecto Client.
+                Client client;
+
+                //Setando o fd.
+                client.set_fd(client_fd);
+                
+                //Adicionando o client na lista dos clientes.
+                this->list_clients.push_back(client);
             }
             else{// Se for outro evento qualquer (cliente enviou mensagem, cliente se desconectou do serivdor).
+
                 //continue...
             }
         }
