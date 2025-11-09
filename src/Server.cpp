@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 22:40:14 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/09 22:44:16 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ void Server::run_server(){
         }
     }
 
-    std::cout << "Encerrando o servidor..." << std::endl;
+    std::cout << std::endl << "Encerrando o servidor..." << std::endl;
     
     freeaddrinfo(res);
     close(this->server_fd);
