@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:25:00 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 21:07:11 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/09 22:03:17 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class Client{
         ~Client();
 
         Client& operator=(const Client& other);
+
+        void set_fd(int fd);
         
 };
 #endif

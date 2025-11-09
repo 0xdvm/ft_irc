@@ -6,11 +6,11 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:49:57 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 21:08:52 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/09 22:29:54 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/Client.hpp"
+#include "../inc/Client.hpp"
 
 Client::Client(){
     this->authenticated = false;
@@ -33,3 +33,6 @@ Client& Client::operator=(const Client& other){
     return (*this);
 }
 
+void Client::set_fd(int fd){
+    this->fd = fd;
+}
