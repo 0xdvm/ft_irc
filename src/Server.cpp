@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 22:31:22 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/09 22:40:14 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,10 @@ void Server::run_server(){
             // Se o evento foi feito para o servidor (quer dizer que um cliente tentou se conectar).
             if (events[i].data.fd == this->server_fd){
                 int client_fd = accept(this->server_fd, NULL, NULL);
+                
+                //Tornando o client nao bloqueante.
+                fcntl(client_fd, F_SETFL, O_NONBLOCK);
+                
                 if (client_fd < 0){
                     if (errno == EWOULDBLOCK || errno == EAGAIN) {
                         // Não há clientes ainda, continue o loop
