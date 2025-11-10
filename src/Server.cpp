@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/10 10:05:48 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/10 11:03:27 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-#include "cmd.hpp"
+#include "../inc/cmd.hpp"
 
 Server::Server(){}
 

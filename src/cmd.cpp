@@ -6,11 +6,11 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:52:08 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/10 10:55:48 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/10 11:03:55 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.hpp"
+#include "../inc/cmd.hpp"
 #include <sstream>
 
 void cmd_start(Client& client, std::string cmd, int size_args){
