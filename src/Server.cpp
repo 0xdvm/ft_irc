@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 22:44:16 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/10 10:05:48 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 #include <sys/epoll.h>
 #include <errno.h>
 #include <stdio.h>
+
+#include "cmd.hpp"
 
 Server::Server(){}
 
@@ -49,6 +51,30 @@ void Server::handle_monitoring(int sigint){
     (void)sigint;
     Server::_monitoring = false;
 }
+
+Client& Server::get_client(int fd){
+    return (this->list_clients[fd]);
+}
+
+void Server::read_client(char* buffer, int size_buf, Client& client) {
+    // Adiciona dados recebidos ao buffer do cliente
+    client.buffer.append(buffer, size_buf);
+
+    size_t pos;
+    while ((pos = client.buffer.find("\r\n")) != std::string::npos || 
+           (pos = client.buffer.find("\n")) != std::string::npos) {
+        // Extrai a mensagem até o final de linha
+        std::string message = client.buffer.substr(0, pos);
+        
+        client.buffer.append(message, message.size());
+        parser(client);
+        // std::cout << "Mensagem recebida: " << message << std::endl;
+
+        // Remove a mensagem processada do buffer
+        client.buffer.erase(0, pos + ((client.buffer[pos] == '\r' && client.buffer[pos+1] == '\n') ? 2 : 1));
+    }
+}
+
 
 void Server::run_server(){
     
@@ -139,11 +165,22 @@ void Server::run_server(){
                 client.set_fd(client_fd);
                 
                 //Adicionando o client na lista dos clientes.
-                this->list_clients.push_back(client);
+                this->list_clients[client_fd] = client;
             }
             else{// Se for outro evento qualquer (cliente enviou mensagem, cliente se desconectou do serivdor).
 
-                //continue...
+                char buffer[1024];
+                //Le a mensagem enviada ao servidor.
+                int size_buf = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
+                
+                //Se houver um erro ou desconecxao com o servidor.
+                if (size_buf <= 0){
+                    this->list_clients.erase(events->data.fd);
+                    close(events[i].data.fd);
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
+                    continue;
+                }
+                this->read_client(buffer, size_buf, this->get_client(events[i].data.fd));
             }
         }
     }
