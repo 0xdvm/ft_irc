@@ -6,7 +6,7 @@
 #    By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/08 12:51:48 by marcsilv          #+#    #+#              #
-#    Updated: 2025/11/09 22:25:39 by dvemba           ###   ########.fr        #
+#    Updated: 2025/11/10 09:24:07 by dvemba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,8 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 INC_DIR		= inc/
 
-SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp
-HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp
+SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp cmd.cpp
+HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp cmd.hpp
 
 SRC			= $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ			= $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))
@@ -31,7 +31,7 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp $(INC)
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
