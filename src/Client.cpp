@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:49:57 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 22:29:54 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/10 10:23:03 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ Client& Client::operator=(const Client& other){
     }
     return (*this);
 }
-
+bool Client::isAuthenticated(){
+    return (this->authenticated);
+}
 void Client::set_fd(int fd){
     this->fd = fd;
 }

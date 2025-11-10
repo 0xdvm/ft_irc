@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:25:00 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 22:03:17 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/10 10:23:14 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@ class Client{
     private:
         std::string username;
         std::string nickname;
-        std::string buffer;
         bool authenticated;
         int fd;
     public:
+        std::string buffer;
         Client();
         Client(const Client& other);
         ~Client();
@@ -30,6 +30,7 @@ class Client{
         Client& operator=(const Client& other);
 
         void set_fd(int fd);
+        bool isAuthenticated();
         
 };
 #endif
