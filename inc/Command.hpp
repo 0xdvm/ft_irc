@@ -1,32 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Parser.hpp                                            :+:      :+:    :+:   */
+/*   Command.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/10 08:53:36 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/11 09:29:18 by dvemba           ###   ########.fr       */
+/*   Created: 2025/11/11 10:46:35 by dvemba            #+#    #+#             */
+/*   Updated: 2025/11/11 12:37:42 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSER_HPP
-#define PARSER_HPP
+#ifndef COMMAND_HPP
+#define COMMAND_HPP
 
-#include "../inc/Client.hpp"
 #include <iostream>
+#include <vector>
+#include "Server.hpp"
+#include "Client.hpp"
 
-class Parser{
-    private:
-        std::string password;
-        
-        void Parser_start(Client& client_ref, std::string Parser, int size_args);
-    public:
-        Parser();
-        Parser(Client& client_ref, std::string password);
-        Parser(const Parser& other);
-        ~Parser();
-
-        Parser& operator=(const Parser& other);
+class Command{
+  private:
+    const int num_args;
+  public:
+    Command(int num_args);
+    virtual void run_command(const Server& server_ref, Client& client_ref, std::vector<std::string> args) const = 0;
+    ~Command();
 };
 #endif

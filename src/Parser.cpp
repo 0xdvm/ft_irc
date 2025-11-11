@@ -15,22 +15,22 @@
 
 Parser::Parser(){}
 
-Parser::Parser(Client& client, std::string password): password(password){
+Parser::Parser(Client& client_ref, std::string password): password(password){
     int i = 0;
-    std::stringstream ss(client.buffer);
+    std::stringstream ss(client_ref.buffer);
     std::string response;
-    std::string Parser;
+    std::string cmd;
     
     while (std::getline(ss, response, ' ')){
         if (!response.empty()){
             if (i == 0){
-                Parser = response;
+                cmd = response;
                 std::cout << "Command: " << response << std::endl;   
             }
             i++;
         }
     }
-    this->Parser_start(client, Parser, i);
+    this->Parser_start(client_ref, cmd, i);
 }
 
 Parser::~Parser(){}
@@ -42,14 +42,8 @@ Parser& Parser::operator=(const Parser& other){
     return (*this);
 }
 
-void Parser::Parser_start(Client& client, std::string Parser, int size_args){
+void Parser::Parser_start(Client& client_ref, std::string cmd, int size_args){
     (void)size_args;
-    (void)Parser;
-    
-    if (Parser == "CAP" && !client.isAuthenticated()){
-        std::cout << ":irc.server: CAP * LS :" << std::endl;
-    }
-    else{
-        std::cout << "Voce nao esta autenticado, autentica-se" << std::endl;
-    }
+    (void)cmd;
+    (void)client_ref;
 }
