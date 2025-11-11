@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cmd.cpp                                            :+:      :+:    :+:   */
+/*   Parser.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,50 +10,46 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/Cmd.hpp"
+#include "../inc/Parser.hpp"
 #include <sstream>
 
-Cmd::Cmd(){}
+Parser::Parser(){}
 
-Cmd::Cmd(std::string password){
-    this->password = password;    
+Parser::Parser(Client& client, std::string password): password(password){
+    int i = 0;
+    std::stringstream ss(client.buffer);
+    std::string response;
+    std::string Parser;
+    
+    while (std::getline(ss, response, ' ')){
+        if (!response.empty()){
+            if (i == 0){
+                Parser = response;
+                std::cout << "Command: " << response << std::endl;   
+            }
+            i++;
+        }
+    }
+    this->Parser_start(client, Parser, i);
 }
 
-Cmd::~Cmd(){}
+Parser::~Parser(){}
 
-Cmd& Cmd::operator=(const Cmd& other){
+Parser& Parser::operator=(const Parser& other){
     if (this != &other){
         this->password = other.password;
     }
     return (*this);
 }
 
-void Cmd::cmd_start(Client& client, std::string cmd, int size_args){
+void Parser::Parser_start(Client& client, std::string Parser, int size_args){
     (void)size_args;
-    (void)cmd;
+    (void)Parser;
     
-    if (cmd == "CAP" && !client.isAuthenticated()){
+    if (Parser == "CAP" && !client.isAuthenticated()){
         std::cout << ":irc.server: CAP * LS :" << std::endl;
     }
     else{
         std::cout << "Voce nao esta autenticado, autentica-se" << std::endl;
     }
-}
-
-void Cmd::parser(Client& client){
-    int i = 0;
-    std::stringstream ss(client.buffer);
-    std::string response;
-    std::string cmd;
-    
-    while (std::getline(ss, response, ' ')){
-        if (!response.empty()){
-            if (i == 0){
-                cmd = response;
-                std::cout << "Command: " << response << std::endl;   
-            }
-            i++;
-        }
-    }
-    cmd_start(client, cmd, i);
 }

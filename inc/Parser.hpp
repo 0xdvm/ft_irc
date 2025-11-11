@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cmd.hpp                                            :+:      :+:    :+:   */
+/*   Parser.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:53:36 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/10 21:11:01 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/11 09:29:18 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef CMD_HPP
-#define CMD_HPP
+#ifndef PARSER_HPP
+#define PARSER_HPP
 
 #include "../inc/Client.hpp"
 #include <iostream>
 
-class Cmd{
+class Parser{
     private:
         std::string password;
+        
+        void Parser_start(Client& client, std::string Parser, int size_args);
     public:
-        Cmd();
-        Cmd(std::string password);
-        Cmd(const Cmd& other);
-        ~Cmd();
+        Parser();
+        Parser(Client& clien, std::string password);
+        Parser(const Parser& other);
+        ~Parser();
 
-        Cmd& operator=(const Cmd& other);
-        void parser(Client& client);
-        void cmd_start(Client& client, std::string cmd, int size_args);
+        Parser& operator=(const Parser& other);
 };
 #endif

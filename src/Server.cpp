@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/11 06:51:25 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/11 10:16:38 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-#include "../inc/Cmd.hpp"
+#include "../inc/Parser.hpp"
 
 Server::Server(){}
 
@@ -67,9 +67,8 @@ void Server::read_client(char* buffer, int size_buf, Client& client) {
         std::string message = client.buffer.substr(0, pos);
         
         client.buffer.append(message, message.size());
-        Cmd cmd(this->_password);
         
-        cmd.parser(client);
+        Parser Parser(client, this->_password);
         // std::cout << "Mensagem recebida: " << message << std::endl;
 
         // Remove a mensagem processada do buffer
