@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 08:53:36 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/10 10:18:34 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/10 21:11:01 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,17 @@
 #include "../inc/Client.hpp"
 #include <iostream>
 
-void parser(Client& client);
-void cmcmd_startd(Client& client, std::string cmd, int size_args);
+class Cmd{
+    private:
+        std::string password;
+    public:
+        Cmd();
+        Cmd(std::string password);
+        Cmd(const Cmd& other);
+        ~Cmd();
+
+        Cmd& operator=(const Cmd& other);
+        void parser(Client& client);
+        void cmd_start(Client& client, std::string cmd, int size_args);
+};
 #endif
