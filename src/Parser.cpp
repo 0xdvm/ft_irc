@@ -67,7 +67,7 @@ void Parser::Parser_start(Client& client_ref, std::string cmd){
 
     std::vector<std::string>::iterator it = args.begin();
     while (it != args.end()){
-        std::cout <<  ":" << *it << std::endl;
+        std::cout << *it << std::endl;
         it++;
     }
     std::cout << "Size: " << args.size() << std::endl;
