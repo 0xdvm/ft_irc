@@ -12,6 +12,7 @@
 
 #include "../inc/Parser.hpp"
 #include <sstream>
+#include <vector>
 
 Parser::Parser(){}
 
@@ -30,7 +31,7 @@ Parser::Parser(Client& client_ref, std::string password): password(password){
             i++;
         }
     }
-    this->Parser_start(client_ref, cmd, i);
+    this->Parser_start(client_ref, cmd);
 }
 
 Parser::~Parser(){}
@@ -42,8 +43,33 @@ Parser& Parser::operator=(const Parser& other){
     return (*this);
 }
 
-void Parser::Parser_start(Client& client_ref, std::string cmd, int size_args){
-    (void)size_args;
-    (void)cmd;
-    (void)client_ref;
+void Parser::Parser_start(Client& client_ref, std::string cmd){
+    std::vector<std::string> args;
+    std::stringstream ss(client_ref.buffer);
+    std::string argument;
+    
+    while(std::getline(ss, argument, ' ')){
+        if (!argument.empty()){
+            if (argument.compare(cmd) != 0){
+                if (argument.at(0) == ':'){
+                    int pos = ss.str().find(':');
+                    pos++;
+
+                    argument = ss.str().substr(pos);
+                    argument[argument.size() - 1] = '\0';
+                    args.push_back(argument);
+                    break;
+                }
+                args.push_back(argument);
+            }
+        }
+    }
+
+    std::vector<std::string>::iterator it = args.begin();
+    while (it != args.end()){
+        std::cout <<  ":" << *it << std::endl;
+        it++;
+    }
+    std::cout << "Size: " << args.size() << std::endl;
+    
 }

@@ -20,7 +20,7 @@ class Parser{
     private:
         std::string password;
         
-        void Parser_start(Client& client_ref, std::string Parser, int size_args);
+        void Parser_start(Client& client_ref, std::string Parser);
     public:
         Parser();
         Parser(Client& client_ref, std::string password);
