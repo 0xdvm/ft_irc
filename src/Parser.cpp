@@ -51,14 +51,22 @@ void Parser::Parser_start(Client& client_ref, std::string cmd){
     while(std::getline(ss, argument, ' ')){
         if (!argument.empty()){
             if (argument.compare(cmd) != 0){
-                if (argument.at(0) == ':'){
+                if (argument.at(0) == ':' && argument.size() > 1){
                     int pos = ss.str().find(':');
                     pos++;
 
                     argument = ss.str().substr(pos);
-                    argument[argument.size() - 1] = '\0';
+
+                    //Remove o '\n' no final da string.
+                    if (argument[argument.size() - 1] == '\n'){
+                        argument[argument.size() - 1] = '\0';
+                    }
                     args.push_back(argument);
                     break;
+                }
+                //Remove o '\n' no final da string.
+                if (argument[argument.size() - 1] == '\n'){
+                    argument[argument.size() - 1] = '\0';
                 }
                 args.push_back(argument);
             }
