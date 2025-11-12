@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:25:00 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/10 10:23:14 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 20:24:15 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,41 @@
 
 class Client{
     private:
-        std::string username;
-        std::string nickname;
-        bool authenticated;
         int fd;
+        
+        std::string _nickname;
+        std::string _username;
+        std::string _realname;
+        std::string _message;
+
+        bool _passReceived;
+        bool _nickReceived;
+        bool _userReceived;
+        bool _isAuthenticated;
     public:
         std::string buffer;
         Client();
-        Client(const Client& other);
         ~Client();
 
-        Client& operator=(const Client& other);
-
-        void set_fd(int fd);
+        int& get_fd();
+        bool hasPass();
+        bool hasNick();
+        bool hasUser();
         bool isAuthenticated();
+        std::string getNickname();
+        std::string getUsername();
+        std::string getRealname();
+        std::string getMessage();
+        
+        void setPass(bool v);
+        void setNick(bool v);
+        void setUser(bool v);
+        void setAuthenticated(bool v);
+        void set_fd(int fd);
+        void setNickname(std::string&);
+        void setUsername(std::string&);
+        void setRealname(std::string&);
+        void setMessage(std::string&);
         
 };
 #endif
