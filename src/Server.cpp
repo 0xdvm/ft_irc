@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 14:38:54 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 21:01:48 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ Client& Server::get_client(int fd){
     return (this->list_clients[fd]);
 }
 
+std::string& Server::get_password(){
+    return (this->_password);
+}
+
 void Server::read_client(char* buffer, int size_buf, Client& client) {
     // Adiciona dados recebidos ao buffer do cliente
     client.buffer.append(buffer, size_buf);
@@ -49,9 +53,8 @@ void Server::read_client(char* buffer, int size_buf, Client& client) {
            (pos = client.buffer.find("\n")) != std::string::npos) {
         // Extrai a mensagem até o final de linha
         std::string message = client.buffer.substr(0, pos);
-        
-        client.buffer.append(message, message.size());
-        
+        client.setMessage(message);
+    
         Parser Parser(*this, client);
         // std::cout << "Mensagem recebida: " << message << std::endl;
 

@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:34:20 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 14:47:22 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 16:43:44 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ class Server{
     ~Server(); 
     
     Client& get_client(int fd);
+    std::string& get_password();
     void read_client(char* buffer, int size_buf, Client& client);
     void run_server();
-      
 };
 #endif
