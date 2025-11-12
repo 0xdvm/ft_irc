@@ -16,12 +16,12 @@
 
 #include "../inc/commands/PASS.hpp"
 
-Parser::Parser(const Server& server_ref, Client& client_ref){
+Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
     this->list_commands = get_list_commands();
 
     int i = 0;
-    std::stringstream ss(client_ref.buffer);
+    std::stringstream ss(client_ref.getMessage());
     std::string response;
     std::string cmd;
     
@@ -30,6 +30,7 @@ Parser::Parser(const Server& server_ref, Client& client_ref){
             if (i == 0){
                 cmd = response;
                 std::cout << "Command: " << response << std::endl;   
+                break;
             }
             i++;
         }
@@ -53,10 +54,9 @@ std::map<std::string, Command *> Parser::get_list_commands(){
     return (commads);
 }
 
-void Parser::Parser_start(const Server& server_ref, Client& client_ref, std::string cmd){
-
+void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cmd){
     std::vector<std::string> args;
-    std::stringstream ss(client_ref.buffer);
+    std::stringstream ss(client_ref.getMessage());
     std::string argument;
     
     //Listando os argumentos...
@@ -66,35 +66,34 @@ void Parser::Parser_start(const Server& server_ref, Client& client_ref, std::str
                 if (argument.at(0) == ':' && argument.size() > 1){
                     int pos = ss.str().find(':');
                     pos++;
-                    
                     argument = ss.str().substr(pos);
-
-                    //Remove o '\n' no final da string.
-                    if (argument[argument.size() - 1] == '\n'){
-                        argument[argument.size() - 1] = '\0';
-                    }
                     args.push_back(argument);
                     break;
-                }
-                //Remove o '\n' no final da string.
-                if (argument[argument.size() - 1] == '\n'){
-                    argument[argument.size() - 1] = '\0';
                 }
                 args.push_back(argument);
             }
         }
     }
+    
     //Verificando se o comando existe.
     if (this->list_commands[cmd]){
-        std::vector<std::string>::iterator it = args.begin();
-        while (it != args.end()){
-            std::cout << *it << std::endl;
-            it++;
+        // std::vector<std::string>::iterator it = args.begin();
+        // while (it != args.end()){
+        //     std::cout << *it << std::endl;
+        //     it++;
+        // }
+        // std::cout << "Size: " << args.size() << std::endl;
+
+        //Verifica se o cliente tentou executar outro comando sem ser autenticado.
+        if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" && cmd != "CAP") 
+            && !client_ref.isAuthenticated()){
+            std::cout << ":ircserv 403 " << cmd << " :You aren't authenticated, please authenticate now!" << std::endl;
+            return;
         }
-        std::cout << "Size: " << args.size() << std::endl;
+        //Roda o comando com os argumentos
         this->list_commands[cmd]->run_command(server_ref, client_ref, args);
     }
     else{
-        std::cout << ":ircserv 417 " << cmd << ": invalid command" << std::endl;
+        std::cout << ":ircserv 417 " << cmd << " :invalid command" << std::endl;
     }
 }
