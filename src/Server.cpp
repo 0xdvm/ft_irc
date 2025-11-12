@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 12:12:55 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 14:38:54 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,11 @@
 
 #include "../inc/Parser.hpp"
 
-Server::Server(){}
-
-Server::Server(const Server& other){
-    *this = other;
-}
-
 bool Server::_monitoring = true;  
 
-Server::Server(std::string port, std::string password): _port(port), _password(password){
-}
+Server::Server(std::string port, std::string password): _port(port), _password(password){}
 
 Server::~Server(){}
-
-Server& Server::operator=(const Server& other){
-    if (this != &other){
-        this->_password = other._password;
-        this->_port = other._port;
-        this->server_fd = other.server_fd;
-    }
-    return (*this);
-}
 
 void Server::handle_monitoring(int sigint){
     (void)sigint;
@@ -75,7 +59,6 @@ void Server::read_client(char* buffer, int size_buf, Client& client) {
         client.buffer.erase(0, pos + ((client.buffer[pos] == '\r' && client.buffer[pos+1] == '\n') ? 2 : 1));
     }
 }
-
 
 void Server::run_server(){
     

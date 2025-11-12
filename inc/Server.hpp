@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:34:20 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 12:06:00 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 14:47:22 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 
 class Server{
   private:
-  int server_fd;
+    int server_fd;
+    std::string servername;
     std::string _port;
     std::string _password;
     std::map<int, Client> list_clients;
@@ -27,15 +28,12 @@ class Server{
     static bool _monitoring;
     static void handle_monitoring(int sigint);
   public:
-    Server();
-    Server(const Server& other);
     Server(std::string port, std::string password);
     ~Server(); 
-
-    Server& operator=(const Server& other);
     
     Client& get_client(int fd);
     void read_client(char* buffer, int size_buf, Client& client);
     void run_server();
+      
 };
 #endif
