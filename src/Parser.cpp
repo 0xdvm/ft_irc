@@ -14,7 +14,12 @@
 #include <sstream>
 #include <vector>
 
+#include "../inc/commands/PASS.hpp"
+
 Parser::Parser(const Server& server_ref, Client& client_ref){
+    //Incializa a lista de commandos...
+    this->list_commands = get_list_commands();
+
     int i = 0;
     std::stringstream ss(client_ref.buffer);
     std::string response;
@@ -29,13 +34,27 @@ Parser::Parser(const Server& server_ref, Client& client_ref){
             i++;
         }
     }
+    //Incia o parsing do commandos...
     this->Parser_start(server_ref, client_ref, cmd);
 }
 
-Parser::~Parser(){}
+Parser::~Parser(){
+    std::map<std::string, Command *>::iterator it;
+    for (it = this->list_commands.begin(); it != this->list_commands.end(); it++){
+        delete it->second;
+    }
+    this->list_commands.clear();
+}
+
+std::map<std::string, Command *> Parser::get_list_commands(){
+    std::map<std::string, Command*> commads;
+
+    commads["PASS"] = new PASS();
+    return (commads);
+}
 
 void Parser::Parser_start(const Server& server_ref, Client& client_ref, std::string cmd){
-    (void)server_ref;
+
     std::vector<std::string> args;
     std::stringstream ss(client_ref.buffer);
     std::string argument;
@@ -47,7 +66,7 @@ void Parser::Parser_start(const Server& server_ref, Client& client_ref, std::str
                 if (argument.at(0) == ':' && argument.size() > 1){
                     int pos = ss.str().find(':');
                     pos++;
-
+                    
                     argument = ss.str().substr(pos);
 
                     //Remove o '\n' no final da string.
@@ -65,12 +84,17 @@ void Parser::Parser_start(const Server& server_ref, Client& client_ref, std::str
             }
         }
     }
-
-    std::vector<std::string>::iterator it = args.begin();
-    while (it != args.end()){
-        std::cout << *it << std::endl;
-        it++;
+    //Verificando se o comando existe.
+    if (this->list_commands[cmd]){
+        std::vector<std::string>::iterator it = args.begin();
+        while (it != args.end()){
+            std::cout << *it << std::endl;
+            it++;
+        }
+        std::cout << "Size: " << args.size() << std::endl;
+        this->list_commands[cmd]->run_command(server_ref, client_ref, args);
     }
-    std::cout << "Size: " << args.size() << std::endl;
-    
+    else{
+        std::cout << ":ircserv 417 " << cmd << ": invalid command" << std::endl;
+    }
 }

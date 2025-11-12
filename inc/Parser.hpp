@@ -17,10 +17,13 @@
 #include "../inc/Server.hpp"
 
 #include <iostream>
+#include <map>
+#include "./commands/Command.hpp"
 
 class Parser{
     private:
-        
+        std::map<std::string, Command *> list_commands;
+        std::map<std::string, Command *> get_list_commands();
         void Parser_start(const Server& server_ref, Client& client_ref, std::string Parser);
     public:
         Parser(const Server& server_ref, Client& client_ref);
