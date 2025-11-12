@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/11 10:16:38 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 12:12:55 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void Server::read_client(char* buffer, int size_buf, Client& client) {
         
         client.buffer.append(message, message.size());
         
-        Parser Parser(client, this->_password);
+        Parser Parser(*this, client);
         // std::cout << "Mensagem recebida: " << message << std::endl;
 
         // Remove a mensagem processada do buffer
@@ -79,7 +79,7 @@ void Server::read_client(char* buffer, int size_buf, Client& client) {
 
 void Server::run_server(){
     
-    std::cout << "Inciando o servidor..." << std::endl;
+    std::cout << "Start server..." << std::endl;
     struct addrinfo hints, *res, *p;
     int epoll_fd;
     
@@ -186,7 +186,7 @@ void Server::run_server(){
         }
     }
 
-    std::cout << std::endl << "Encerrando o servidor..." << std::endl;
+    std::cout << std::endl << "Close server..." << std::endl;
     
     freeaddrinfo(res);
     close(this->server_fd);

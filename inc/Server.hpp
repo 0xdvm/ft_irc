@@ -6,9 +6,12 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:34:20 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 23:09:16 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 12:06:00 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include <iostream>
 #include "Client.hpp"
@@ -35,3 +38,4 @@ class Server{
     void read_client(char* buffer, int size_buf, Client& client);
     void run_server();
 };
+#endif

@@ -14,9 +14,7 @@
 #include <sstream>
 #include <vector>
 
-Parser::Parser(){}
-
-Parser::Parser(Client& client_ref, std::string password): password(password){
+Parser::Parser(const Server& server_ref, Client& client_ref){
     int i = 0;
     std::stringstream ss(client_ref.buffer);
     std::string response;
@@ -31,23 +29,18 @@ Parser::Parser(Client& client_ref, std::string password): password(password){
             i++;
         }
     }
-    this->Parser_start(client_ref, cmd);
+    this->Parser_start(server_ref, client_ref, cmd);
 }
 
 Parser::~Parser(){}
 
-Parser& Parser::operator=(const Parser& other){
-    if (this != &other){
-        this->password = other.password;
-    }
-    return (*this);
-}
-
-void Parser::Parser_start(Client& client_ref, std::string cmd){
+void Parser::Parser_start(const Server& server_ref, Client& client_ref, std::string cmd){
+    (void)server_ref;
     std::vector<std::string> args;
     std::stringstream ss(client_ref.buffer);
     std::string argument;
     
+    //Listando os argumentos...
     while(std::getline(ss, argument, ' ')){
         if (!argument.empty()){
             if (argument.compare(cmd) != 0){

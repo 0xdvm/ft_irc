@@ -14,19 +14,16 @@
 #define PARSER_HPP
 
 #include "../inc/Client.hpp"
+#include "../inc/Server.hpp"
+
 #include <iostream>
 
 class Parser{
     private:
-        std::string password;
         
-        void Parser_start(Client& client_ref, std::string Parser);
+        void Parser_start(const Server& server_ref, Client& client_ref, std::string Parser);
     public:
-        Parser();
-        Parser(Client& client_ref, std::string password);
-        Parser(const Parser& other);
+        Parser(const Server& server_ref, Client& client_ref);
         ~Parser();
-
-        Parser& operator=(const Parser& other);
 };
 #endif
