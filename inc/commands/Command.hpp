@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 10:46:35 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 12:01:46 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/12 13:31:56 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 #include <iostream>
 #include <vector>
-#include "Server.hpp"
-#include "Client.hpp"
+#include "../Server.hpp"
+#include "../Client.hpp"
 
 class Command{
   private:
@@ -26,5 +26,6 @@ class Command{
     virtual ~Command();
     
     virtual void run_command(const Server& server_ref, Client& client_ref, std::vector<std::string> args) const = 0;
+    int get_num_args() const;
 };
 #endif
