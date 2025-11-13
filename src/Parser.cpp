@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "../inc/commands/PASS.hpp"
+#include "../inc/utils.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -87,13 +88,13 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
         //Verifica se o cliente tentou executar outro comando sem ser autenticado.
         if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" && cmd != "CAP") 
             && !client_ref.isAuthenticated()){
-            std::cout << ":ircserv 403 " << cmd << " :You aren't authenticated, please authenticate now!" << std::endl;
+            send_irc_reply("ircserv", "403", cmd, "You aren't authenticated, please authenticate now!");
             return;
         }
         //Roda o comando com os argumentos
         this->list_commands[cmd]->run_command(server_ref, client_ref, args);
     }
     else{
-        std::cout << ":ircserv 417 " << cmd << " :invalid command" << std::endl;
+        send_irc_reply("ircserv", "417", cmd, "Unknown " + cmd);
     }
 }
