@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 21:01:48 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 12:49:45 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 
 bool Server::_monitoring = true;  
 
-Server::Server(std::string port, std::string password): _port(port), _password(password){}
+Server::Server(std::string servername, std::string port, std::string password):_servername(servername), _port(port), _password(password){}
 
 Server::~Server(){}
 
@@ -42,6 +42,9 @@ Client& Server::get_client(int fd){
 
 std::string& Server::get_password(){
     return (this->_password);
+}
+std::string& Server::get_Servername(){
+    return (this->_servername);
 }
 
 void Server::read_client(char* buffer, int size_buf, Client& client) {
@@ -80,40 +83,40 @@ void Server::run_server(){
     getaddrinfo(NULL, this->_port.c_str(), &hints, &res);
     
     for(p = res; p != NULL; p = p->ai_next){
-        this->server_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-        if (this->server_fd == -1){
+        this->_server_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
+        if (this->_server_fd == -1){
             continue;
         }
         int opt = 1;
         
-        if (setsockopt(this->server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0){
-            close(this->server_fd);
+        if (setsockopt(this->_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0){
+            close(this->_server_fd);
             continue;
         }
         
-        if (bind(this->server_fd, p->ai_addr, p->ai_addrlen) == 0){
+        if (bind(this->_server_fd, p->ai_addr, p->ai_addrlen) == 0){
             break;
         }
-        close(this->server_fd);
+        close(this->_server_fd);
     }
 
     //Tornando o socket do servidor nao bloqueante.
-    fcntl(this->server_fd, F_SETFL, O_NONBLOCK);
+    fcntl(this->_server_fd, F_SETFL, O_NONBLOCK);
 
-    if (listen(this->server_fd, 128) < 0){
+    if (listen(this->_server_fd, 128) < 0){
         throw std::runtime_error("listen");
     }
 
     //Criando um epoll para monitorar os clientes que causerem um evento.
     epoll_fd = epoll_create1(0);
 
-    //Criando um configuracao de monitoramento para o server_fd.
+    //Criando um configuracao de monitoramento para o _server_fd.
     struct epoll_event ev;
-    ev.data.fd = this->server_fd;
+    ev.data.fd = this->_server_fd;
     ev.events = EPOLLIN;
 
-    //Adicionando o server_fd epoll_fd para ser monitorado.
-    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, this->server_fd, &ev);
+    //Adicionando o _server_fd epoll_fd para ser monitorado.
+    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, this->_server_fd, &ev);
 
     //Lista que serao adicionando os sockets que causaram evento ao servidor.
     struct epoll_event events[100];
@@ -124,8 +127,8 @@ void Server::run_server(){
 
         for (int i = 0; i < n; i++){
             // Se o evento foi feito para o servidor (quer dizer que um cliente tentou se conectar).
-            if (events[i].data.fd == this->server_fd){
-                int client_fd = accept(this->server_fd, NULL, NULL);
+            if (events[i].data.fd == this->_server_fd){
+                int client_fd = accept(this->_server_fd, NULL, NULL);
                 
                 //Tornando o client nao bloqueante.
                 fcntl(client_fd, F_SETFL, O_NONBLOCK);
@@ -175,7 +178,7 @@ void Server::run_server(){
     std::cout << std::endl << "Close server..." << std::endl;
     
     freeaddrinfo(res);
-    close(this->server_fd);
+    close(this->_server_fd);
     close(epoll_fd);
 }
 
