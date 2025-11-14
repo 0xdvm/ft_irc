@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 10:46:35 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 21:19:41 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 20:50:18 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class Command{
     Command(int num_args);
     virtual ~Command();
     
-    virtual void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args) const = 0;
+    virtual void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args) = 0;
     int get_num_args() const;
 };
 #endif
