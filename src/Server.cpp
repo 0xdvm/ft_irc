@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 12:49:45 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 20:13:20 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ std::string& Server::get_password(){
 }
 std::string& Server::get_Servername(){
     return (this->_servername);
+}
+
+std::map<int, Client> Server::getListClient(){
+    return (this->list_clients);
 }
 
 void Server::read_client(char* buffer, int size_buf, Client& client) {
