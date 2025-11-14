@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/03 15:29:52 by marcsilv          #+#    #+#             */
-/*   Updated: 2025/11/06 18:00:22 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 13:59:33 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ IRC &IRC::operator=(const IRC &other) {
 }
 
 void	IRC::run(void) {
-	Server server(this->_port, this->_password);
+	Server server("ircserv", this->_port, this->_password);
 
 	server.run_server();
 }
