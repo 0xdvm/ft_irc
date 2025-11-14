@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 12:20:04 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 16:01:50 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 15:05:05 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 #include "Command.hpp"
 
 class PASS: public Command{
-  private:
-  
   public:
     PASS();
     ~PASS();
