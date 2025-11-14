@@ -14,8 +14,9 @@
 #include <sstream>
 #include <vector>
 
-#include "../inc/commands/PASS.hpp"
 #include "../inc/utils.hpp"
+#include "../inc/commands/PASS.hpp"
+#include "../inc/commands/CAP.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -50,10 +51,11 @@ Parser::~Parser(){
 }
 
 std::map<std::string, Command *> Parser::get_list_commands(){
-    std::map<std::string, Command*> commads;
+    std::map<std::string, Command*> commands;
 
-    commads["PASS"] = new PASS();
-    return (commads);
+    commands["PASS"] = new PASS();
+    commands["CAP"]  = new CAP();
+    return (commands);
 }
 
 void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cmd){
@@ -82,8 +84,8 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
         //Verifica se o cliente tentou executar outro comando sem ser autenticado.
         if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" 
             && cmd != "CAP") && !client_ref.isAuthenticated()){
-                
-            send_irc_reply(client_ref, "ircserv", ERR_NOTREGISTERED, 
+
+            send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTREGISTERED, 
                 cmd, "You have not registered");
             return;
         }
@@ -91,6 +93,6 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
         this->list_commands[cmd]->run_command(server_ref, client_ref, args);
     }
     else{
-        send_irc_reply(client_ref, "ircserv", ERR_UNKNOWNCOMMAND, cmd, "Unknown " + cmd);
+        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_UNKNOWNCOMMAND, cmd, "Unknown " + cmd);
     }
 }
