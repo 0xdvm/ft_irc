@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 12:19:54 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/13 21:27:05 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 11:32:46 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,18 @@ PASS::~PASS(){}
 void PASS::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args) const{
     int num_args = args.size();
     
-    if (client_ref.hasPass()){
-        send_irc_reply(client_ref, "ircserv", "500", "*", "You may not reregister");
+    if (num_args == 0){
+        send_irc_reply(client_ref, "ircserv", ERR_NEEDMOREPARAMS, "*", "Not enough parameters");
         return;
     }
     
-    if (num_args > this->get_num_args()){
-        send_irc_reply(client_ref, "ircserv", "417", "*", "Not enough parameters");
+    if (client_ref.hasPass()){
+        send_irc_reply(client_ref, "ircserv", ERR_ALREADYREGISTERED, "*", "You may not reregister");
         return;
     }
-
+    
     if (args.at(0).compare(server_ref.get_password()) != 0){
-        send_irc_reply(client_ref, "ircserv", "450", "*", "Password incorrect");
-        send_irc_reply(client_ref, "ircserv", "407", "*", "You will be desconnected from irc.serv");
+        send_irc_reply(client_ref, "ircserv", ERR_PASSWDMISMATCH, "*", "Password incorrect");
         //Desconectando o cliente do servidor.
         close(client_ref.get_fd());
         return;
