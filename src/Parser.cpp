@@ -17,6 +17,7 @@
 #include "../inc/utils.hpp"
 #include "../inc/commands/PASS.hpp"
 #include "../inc/commands/CAP.hpp"
+#include "../inc/commands/NICK.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -53,8 +54,9 @@ Parser::~Parser(){
 std::map<std::string, Command *> Parser::get_list_commands(){
     std::map<std::string, Command*> commands;
 
-    commands["PASS"] = new PASS();
     commands["CAP"]  = new CAP();
+    commands["PASS"] = new PASS();
+    commands["NICK"] = new NICK();
     return (commands);
 }
 
