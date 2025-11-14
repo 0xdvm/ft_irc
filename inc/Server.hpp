@@ -6,9 +6,12 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:34:20 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/09 23:09:16 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 12:48:53 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include <iostream>
 #include "Client.hpp"
@@ -16,7 +19,8 @@
 
 class Server{
   private:
-  int server_fd;
+    int _server_fd;
+    std::string _servername;
     std::string _port;
     std::string _password;
     std::map<int, Client> list_clients;
@@ -24,14 +28,13 @@ class Server{
     static bool _monitoring;
     static void handle_monitoring(int sigint);
   public:
-    Server();
-    Server(const Server& other);
-    Server(std::string port, std::string password);
+    Server(std::string servername, std::string port, std::string password);
     ~Server(); 
-
-    Server& operator=(const Server& other);
     
     Client& get_client(int fd);
+    std::string& get_password();
+    std::string& get_Servername();
     void read_client(char* buffer, int size_buf, Client& client);
     void run_server();
 };
+#endif

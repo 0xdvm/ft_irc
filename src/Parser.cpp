@@ -12,44 +12,87 @@
 
 #include "../inc/Parser.hpp"
 #include <sstream>
+#include <vector>
 
-Parser::Parser(){}
+#include "../inc/utils.hpp"
+#include "../inc/commands/PASS.hpp"
+#include "../inc/commands/CAP.hpp"
 
-Parser::Parser(Client& client, std::string password): password(password){
+Parser::Parser(Server& server_ref, Client& client_ref){
+    //Incializa a lista de commandos...
+    this->list_commands = get_list_commands();
+
     int i = 0;
-    std::stringstream ss(client.buffer);
+    std::stringstream ss(client_ref.getMessage());
     std::string response;
-    std::string Parser;
+    std::string cmd;
     
     while (std::getline(ss, response, ' ')){
         if (!response.empty()){
             if (i == 0){
-                Parser = response;
+                cmd = response;
                 std::cout << "Command: " << response << std::endl;   
+                
+                //Incia o parsing do commandos...
+                this->Parser_start(server_ref, client_ref, cmd);
+                return;
             }
             i++;
         }
     }
-    this->Parser_start(client, Parser, i);
 }
 
-Parser::~Parser(){}
-
-Parser& Parser::operator=(const Parser& other){
-    if (this != &other){
-        this->password = other.password;
+Parser::~Parser(){
+    std::map<std::string, Command *>::iterator it;
+    for (it = this->list_commands.begin(); it != this->list_commands.end(); it++){
+        delete it->second;
     }
-    return (*this);
+    this->list_commands.clear();
 }
 
-void Parser::Parser_start(Client& client, std::string Parser, int size_args){
-    (void)size_args;
-    (void)Parser;
+std::map<std::string, Command *> Parser::get_list_commands(){
+    std::map<std::string, Command*> commands;
+
+    commands["PASS"] = new PASS();
+    commands["CAP"]  = new CAP();
+    return (commands);
+}
+
+void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cmd){
+    std::vector<std::string> args;
+    std::stringstream ss(client_ref.getMessage());
+    std::string argument;
     
-    if (Parser == "CAP" && !client.isAuthenticated()){
-        std::cout << ":irc.server: CAP * LS :" << std::endl;
+    //Listando os argumentos...
+    while(std::getline(ss, argument, ' ')){
+        if (!argument.empty()){
+            if (argument.compare(cmd) != 0){
+                if (argument.at(0) == ':' && argument.size() > 1){
+                    int pos = ss.str().find(':');
+                    pos++;
+                    argument = ss.str().substr(pos);
+                    args.push_back(argument);
+                    break;
+                }
+                args.push_back(argument);
+            }
+        }
+    }
+    
+    //Verificando se o comando existe.
+    if (this->list_commands[cmd]){
+        //Verifica se o cliente tentou executar outro comando sem ser autenticado.
+        if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" 
+            && cmd != "CAP") && !client_ref.isAuthenticated()){
+
+            send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTREGISTERED, 
+                cmd, "You have not registered");
+            return;
+        }
+        //Roda o comando com os argumentos
+        this->list_commands[cmd]->run_command(server_ref, client_ref, args);
     }
     else{
-        std::cout << "Voce nao esta autenticado, autentica-se" << std::endl;
+        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_UNKNOWNCOMMAND, cmd, "Unknown " + cmd);
     }
 }
