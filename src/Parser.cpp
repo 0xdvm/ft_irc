@@ -31,13 +31,14 @@ Parser::Parser(Server& server_ref, Client& client_ref){
             if (i == 0){
                 cmd = response;
                 std::cout << "Command: " << response << std::endl;   
-                break;
+                
+                //Incia o parsing do commandos...
+                this->Parser_start(server_ref, client_ref, cmd);
+                return;
             }
             i++;
         }
     }
-    //Incia o parsing do commandos...
-    this->Parser_start(server_ref, client_ref, cmd);
 }
 
 Parser::~Parser(){
@@ -78,23 +79,18 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
     
     //Verificando se o comando existe.
     if (this->list_commands[cmd]){
-        // std::vector<std::string>::iterator it = args.begin();
-        // while (it != args.end()){
-        //     std::cout << *it << std::endl;
-        //     it++;
-        // }
-        // std::cout << "Size: " << args.size() << std::endl;
-
         //Verifica se o cliente tentou executar outro comando sem ser autenticado.
-        if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" && cmd != "CAP") 
-            && !client_ref.isAuthenticated()){
-            send_irc_reply(client_ref, "ircserv", "403", cmd, "You aren't authenticated, please authenticate now!");
+        if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" 
+            && cmd != "CAP") && !client_ref.isAuthenticated()){
+                
+            send_irc_reply(client_ref, "ircserv", ERR_NOTREGISTERED, 
+                cmd, "You have not registered");
             return;
         }
         //Roda o comando com os argumentos
         this->list_commands[cmd]->run_command(server_ref, client_ref, args);
     }
     else{
-        send_irc_reply(client_ref, "ircserv", "417", cmd, "Unknown " + cmd);
+        send_irc_reply(client_ref, "ircserv", ERR_UNKNOWNCOMMAND, cmd, "Unknown " + cmd);
     }
 }
