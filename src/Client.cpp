@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:49:57 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 20:22:54 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 18:12:06 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,9 @@ std::string Client::getRealname(){
 std::string Client::getMessage(){
     return (this->_message);
 }
+std::string Client::getHost(){
+    return (this->_host);
+}
 
 //Setters
 void Client::set_fd(int fd){
@@ -91,4 +94,8 @@ void Client::setRealname(std::string& realname){
 
 void Client::setMessage(std::string& Message){
     this->_message = Message;
+}
+
+void Client::setHost(std::string& host){
+    this->_host = host;
 }

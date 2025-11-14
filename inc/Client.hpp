@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:25:00 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/12 20:24:15 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 18:10:45 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ class Client{
         std::string _username;
         std::string _realname;
         std::string _message;
+        std::string _host;
 
         bool _passReceived;
         bool _nickReceived;
@@ -42,6 +43,7 @@ class Client{
         std::string getUsername();
         std::string getRealname();
         std::string getMessage();
+        std::string getHost();
         
         void setPass(bool v);
         void setNick(bool v);
@@ -52,6 +54,7 @@ class Client{
         void setUsername(std::string&);
         void setRealname(std::string&);
         void setMessage(std::string&);
+        void setHost(std::string&);
         
 };
 #endif
