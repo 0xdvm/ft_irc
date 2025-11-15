@@ -6,16 +6,22 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:49:57 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 18:12:06 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/15 18:44:10 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Client.hpp"
 
-Client::Client():_passReceived(false), 
-                _nickReceived(false), 
-                _userReceived(false),
-                _isAuthenticated(false), buffer(""){}
+Client::Client():   _nickname(""), 
+                    _username(""), 
+                    _realname(""),
+                    _message(""), 
+                    _host(""), 
+                    _servername(""),
+                    _passReceived(false), 
+                    _nickReceived(false), 
+                    _userReceived(false),
+                    _isAuthenticated(false), buffer(""){}
 
 Client::~Client(){}
 
@@ -58,6 +64,9 @@ std::string Client::getMessage(){
 std::string Client::getHost(){
     return (this->_host);
 }
+std::string Client::getServername(){
+    return (this->_servername);
+}
 
 //Setters
 void Client::set_fd(int fd){
@@ -98,4 +107,8 @@ void Client::setMessage(std::string& Message){
 
 void Client::setHost(std::string& host){
     this->_host = host;
+}
+
+void Client::setServername(std::string& servername){
+    this->_servername = servername;
 }
