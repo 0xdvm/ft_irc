@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:21:16 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/15 15:25:43 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/15 16:17:14 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void NICK::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         return;
     }
     if (client_ref.hasNick()){
+        target = client_ref.getNickname();
+        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_ALREADYREGISTERED, target, "You may not reregister");
         return;
     }
     if(!this->isFreeNick(server_ref, args[0])){
