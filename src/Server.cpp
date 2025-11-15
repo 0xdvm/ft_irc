@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 20:13:20 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/15 18:48:16 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,6 @@ void Server::run_server(){
             if (events[i].data.fd == this->_server_fd){
                 int client_fd = accept(this->_server_fd, NULL, NULL);
                 
-                //Tornando o client nao bloqueante.
-                fcntl(client_fd, F_SETFL, O_NONBLOCK);
                 
                 if (client_fd < 0){
                     if (errno == EWOULDBLOCK || errno == EAGAIN) {
@@ -147,6 +145,9 @@ void Server::run_server(){
                         continue;
                     }
                 }
+                //Tornando o client nao bloqueante.
+                fcntl(client_fd, F_SETFL, O_NONBLOCK);
+                
                 struct epoll_event client_ev;
                 client_ev.data.fd = client_fd;
                 client_ev.events = EPOLLIN;
@@ -168,18 +169,23 @@ void Server::run_server(){
                 int size_buf = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
                 
                 //Se houver um erro ou desconecxao com o servidor.
+                int fd = events[i].data.fd; // use o fd correto
                 if (size_buf <= 0){
-                    this->list_clients.erase(events->data.fd);
+                    this->list_clients.erase(fd);
                     close(events[i].data.fd);
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
                     continue;
                 }
-                this->read_client(buffer, size_buf, this->get_client(events[i].data.fd));
+                this->read_client(buffer, size_buf, this->get_client(fd));
             }
         }
     }
 
     std::cout << std::endl << "Close server..." << std::endl;
+
+    //Desconecta os clientes conectados ao servidor...
+    for (std::map<int, Client>::iterator it = list_clients.begin(); it != list_clients.end(); ++it)
+        close(it->first);
     
     freeaddrinfo(res);
     close(this->_server_fd);
