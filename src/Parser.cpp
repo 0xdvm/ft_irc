@@ -18,6 +18,7 @@
 #include "../inc/commands/PASS.hpp"
 #include "../inc/commands/CAP.hpp"
 #include "../inc/commands/NICK.hpp"
+#include "../inc/commands/USER.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -57,6 +58,7 @@ std::map<std::string, Command *> Parser::get_list_commands(){
     commands["CAP"]  = new CAP();
     commands["PASS"] = new PASS();
     commands["NICK"] = new NICK();
+    commands["USER"] = new USER();
     return (commands);
 }
 
@@ -64,12 +66,17 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
     std::vector<std::string> args;
     std::stringstream ss(client_ref.getMessage());
     std::string argument;
-    
+
+    bool isCmdUSER = false;
+
+    if (cmd == "USER"){
+        isCmdUSER = true;
+    }
     //Listando os argumentos...
     while(std::getline(ss, argument, ' ')){
         if (!argument.empty()){
             if (argument.compare(cmd) != 0){
-                if (argument.at(0) == ':' && argument.size() > 1){
+                if (argument.at(0) == ':' && argument.size() > 1 && !isCmdUSER){
                     int pos = ss.str().find(':');
                     pos++;
                     argument = ss.str().substr(pos);
