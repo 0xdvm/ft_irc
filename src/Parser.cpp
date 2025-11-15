@@ -17,6 +17,7 @@
 #include "../inc/utils.hpp"
 #include "../inc/commands/PASS.hpp"
 #include "../inc/commands/CAP.hpp"
+#include "../inc/commands/NICK.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -53,8 +54,9 @@ Parser::~Parser(){
 std::map<std::string, Command *> Parser::get_list_commands(){
     std::map<std::string, Command*> commands;
 
-    commands["PASS"] = new PASS();
     commands["CAP"]  = new CAP();
+    commands["PASS"] = new PASS();
+    commands["NICK"] = new NICK();
     return (commands);
 }
 
@@ -85,8 +87,7 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
         if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" 
             && cmd != "CAP") && !client_ref.isAuthenticated()){
 
-            send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTREGISTERED, 
-                cmd, "You have not registered");
+            send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTREGISTERED, cmd, "You have not registered");
             return;
         }
         //Roda o comando com os argumentos

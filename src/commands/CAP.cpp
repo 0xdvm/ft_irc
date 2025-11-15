@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 20:26:26 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 13:53:01 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 21:30:00 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ CAP::CAP(): Command(1){}
 
 CAP::~CAP(){}
 
-void CAP::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args) const{
+void CAP::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
     int size_args = args.size();
     std::string target = "*";
 

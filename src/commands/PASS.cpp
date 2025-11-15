@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 12:19:54 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 15:01:27 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 21:20:54 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ PASS::PASS(): Command(1){}
 
 PASS::~PASS(){}
 
-void PASS::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args) const{
+void PASS::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
     int num_args = args.size();
     
     if (num_args == 0){

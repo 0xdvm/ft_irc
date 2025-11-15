@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/12 12:20:04 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 15:05:05 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/14 20:50:14 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,6 @@ class PASS: public Command{
   public:
     PASS();
     ~PASS();
-    void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args) const;
+    void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
 };
 #endif
