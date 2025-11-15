@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:21:16 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 21:04:17 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/15 14:42:13 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ void NICK::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_ERRONEUSNICKNAME, args[0], "Erroneus nickname");
         return;
     }
-    if(!this->isFreeNick(server_ref, args[0])){
-        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NICKNAMEINUSE, args[0], "Nickname is already in use");
+    if (client_ref.hasNick()){
         return;
     }
-    if (client_ref.hasNick()){
+    if(!this->isFreeNick(server_ref, args[0])){
+        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NICKNAMEINUSE, args[0], "Nickname is already in use");
         return;
     }
     client_ref.setNickname(args[0]);

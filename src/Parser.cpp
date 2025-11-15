@@ -87,8 +87,7 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
         if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" 
             && cmd != "CAP") && !client_ref.isAuthenticated()){
 
-            send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTREGISTERED, 
-                cmd, "You have not registered");
+            send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTREGISTERED, cmd, "You have not registered");
             return;
         }
         //Roda o comando com os argumentos
