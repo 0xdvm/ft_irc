@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 16:22:27 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/15 19:52:08 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/16 15:14:48 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void USER::run_command(Server& server_ref, Client& client_ref, std::vector<std::
     //Removendo o ':'
     args[3] = args[3].substr(1);
     client_ref.setRealname(args[3]);
-    
+    std::cout << "Realname:" << args[3] << std::endl;
     client_ref.setAuthenticated(true);
     
 }

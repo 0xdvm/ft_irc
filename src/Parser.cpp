@@ -76,9 +76,13 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
     while(std::getline(ss, argument, ' ')){
         if (!argument.empty()){
             if (argument.compare(cmd) != 0){
-                if (argument.at(0) == ':' && argument.size() > 1 && !isCmdUSER){
-                    int pos = ss.str().find(':');
-                    pos++;
+                if (argument.at(0) == ':' && argument.size() > 1){
+                    int pos;
+
+                    pos = ss.str().find(':');
+                    if (!isCmdUSER){
+                        pos++;
+                    }
                     argument = ss.str().substr(pos);
                     args.push_back(argument);
                     break;
