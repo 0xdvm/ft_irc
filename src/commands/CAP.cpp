@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 20:26:26 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 21:30:00 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/17 12:21:35 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ CAP::~CAP(){}
 void CAP::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
     int size_args = args.size();
     std::string target = "*";
-
-    if (client_ref.isAuthenticated()){
+    
+    if (client_ref.hasNick()){
         target = client_ref.getNickname();
     }
     if (size_args == 0){
