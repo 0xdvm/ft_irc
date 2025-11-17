@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 16:22:27 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/16 15:14:48 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/17 10:38:00 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ void USER::run_command(Server& server_ref, Client& client_ref, std::vector<std::
     int size_args = args.size();
     std::string target = "*";
     
+    if (client_ref.hasNick()){
+        target = client_ref.getNickname();
+    }
     if (size_args < this->get_num_args()){
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Not enough parameters");
         return;
@@ -68,8 +71,6 @@ void USER::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         return;
     }
     
-    client_ref.setUser(true);
-    
     client_ref.setUsername(args[0]);
     client_ref.setHost(args[1]);
     client_ref.setServername(args[2]);
@@ -77,7 +78,11 @@ void USER::run_command(Server& server_ref, Client& client_ref, std::vector<std::
     //Removendo o ':'
     args[3] = args[3].substr(1);
     client_ref.setRealname(args[3]);
-    std::cout << "Realname:" << args[3] << std::endl;
-    client_ref.setAuthenticated(true);
     
+    client_ref.setUser(true);
+    client_ref.setAuthenticated(true);
+
+    send_irc_reply(client_ref, server_ref.get_Servername(), RPL_WELCOME, target, "Welcome to the IRCSERV");
+    send_irc_reply(client_ref, server_ref.get_Servername(), RPL_YOURHOST, target, "Your host is server, running version 1.0");
+    send_irc_reply(client_ref, server_ref.get_Servername(), RPL_CREATED, target, "This server was created on 2025-11-17");
 }
