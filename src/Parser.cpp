@@ -19,6 +19,8 @@
 #include "../inc/commands/CAP.hpp"
 #include "../inc/commands/NICK.hpp"
 #include "../inc/commands/USER.hpp"
+#include "../inc/commands/MODE.hpp"
+#include "../inc/commands/PING.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -59,6 +61,8 @@ std::map<std::string, Command *> Parser::get_list_commands(){
     commands["PASS"] = new PASS();
     commands["NICK"] = new NICK();
     commands["USER"] = new USER();
+    commands["MODE"] = new MODE();
+    commands["PING"] = new PING();
     return (commands);
 }
 
@@ -80,9 +84,7 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
                     int pos;
 
                     pos = ss.str().find(':');
-                    if (!isCmdUSER){
-                        pos++;
-                    }
+                    if (!isCmdUSER){pos++;}
                     argument = ss.str().substr(pos);
                     args.push_back(argument);
                     break;
@@ -94,6 +96,13 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
     
     //Verificando se o comando existe.
     if (this->list_commands[cmd]){
+        // std::vector<std::string>::iterator it = args.begin();
+
+        // std::cout << "ARGS: " << std::endl;
+        // while (it != args.end()){
+        //     std::cout << *it << std::endl;
+        //     it++;
+        // }
         //Verifica se o cliente tentou executar outro comando sem ser autenticado.
         if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" 
             && cmd != "CAP") && !client_ref.isAuthenticated()){
