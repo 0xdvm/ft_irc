@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CAP.cpp                                            :+:      :+:    :+:   */
+/*   PING.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/13 20:26:26 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/17 12:21:35 by dvemba           ###   ########.fr       */
+/*   Created: 2025/11/17 19:48:07 by dvemba            #+#    #+#             */
+/*   Updated: 2025/11/17 20:30:05 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../inc/commands/CAP.hpp"
+#include "../../inc/commands/PING.hpp"
 #include "../../inc/utils.hpp"
+#include "sys/socket.h"
 
-CAP::CAP(): Command(1){}
+PING::PING():Command(1){}
 
-CAP::~CAP(){}
+PING::~PING(){}
 
-void CAP::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
+void PING::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
     int size_args = args.size();
-    std::string target = "*";
+    std::string target = "8";
     
     if (client_ref.hasNick()){
         target = client_ref.getNickname();
@@ -28,8 +29,7 @@ void CAP::run_command(Server& server_ref, Client& client_ref, std::vector<std::s
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Not enough parameters");
         return;
     }
-    if (args[0].compare("LS") != 0 && args[0].compare("ACK") != 0 && args[0].compare("REQ") != 0){
-        return;
-    }
-    send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Capabilities not supported");
+    std::string reply = ":PONG " + args[0] + "\r\n";
+    send(client_ref.get_fd(), reply.c_str(), reply.size(), 0);
+    // send_irc_reply(client_ref, server_ref.get_Servername(), "", "","PONG " + args[0]);
 }

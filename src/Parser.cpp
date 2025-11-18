@@ -18,6 +18,9 @@
 #include "../inc/commands/PASS.hpp"
 #include "../inc/commands/CAP.hpp"
 #include "../inc/commands/NICK.hpp"
+#include "../inc/commands/USER.hpp"
+#include "../inc/commands/MODE.hpp"
+#include "../inc/commands/PING.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -57,6 +60,9 @@ std::map<std::string, Command *> Parser::get_list_commands(){
     commands["CAP"]  = new CAP();
     commands["PASS"] = new PASS();
     commands["NICK"] = new NICK();
+    commands["USER"] = new USER();
+    commands["MODE"] = new MODE();
+    commands["PING"] = new PING();
     return (commands);
 }
 
@@ -64,14 +70,21 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
     std::vector<std::string> args;
     std::stringstream ss(client_ref.getMessage());
     std::string argument;
-    
+
+    bool isCmdUSER = false;
+
+    if (cmd == "USER"){
+        isCmdUSER = true;
+    }
     //Listando os argumentos...
     while(std::getline(ss, argument, ' ')){
         if (!argument.empty()){
             if (argument.compare(cmd) != 0){
                 if (argument.at(0) == ':' && argument.size() > 1){
-                    int pos = ss.str().find(':');
-                    pos++;
+                    int pos;
+
+                    pos = ss.str().find(':');
+                    if (!isCmdUSER){pos++;}
                     argument = ss.str().substr(pos);
                     args.push_back(argument);
                     break;
@@ -83,6 +96,13 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
     
     //Verificando se o comando existe.
     if (this->list_commands[cmd]){
+        // std::vector<std::string>::iterator it = args.begin();
+
+        // std::cout << "ARGS: " << std::endl;
+        // while (it != args.end()){
+        //     std::cout << *it << std::endl;
+        //     it++;
+        // }
         //Verifica se o cliente tentou executar outro comando sem ser autenticado.
         if ((cmd != "PASS" && cmd  != "NICK" && cmd != "USER" 
             && cmd != "CAP") && !client_ref.isAuthenticated()){
