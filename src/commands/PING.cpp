@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:48:07 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/17 20:30:05 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/19 09:44:07 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ PING::~PING(){}
 
 void PING::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
     int size_args = args.size();
-    std::string target = "8";
+    std::string target = "*";
     
     if (client_ref.hasNick()){
         target = client_ref.getNickname();
