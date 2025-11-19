@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/15 18:48:16 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/19 10:57:23 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,17 @@ std::string& Server::get_Servername(){
 
 std::map<int, Client> Server::getListClient(){
     return (this->list_clients);
+}
+Client& Server::findUser(std::string& nickname){
+    std::map<int, Client>::iterator it = this->list_clients.begin();
+
+    while (it != this->list_clients.end()){
+        if (nickname.compare(it->second.getNickname()) == 0){
+            return (it->second);
+        }
+        it++;
+    }
+    throw std::runtime_error("User not found");
 }
 
 void Server::read_client(char* buffer, int size_buf, Client& client) {
