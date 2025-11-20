@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/20 11:07:38 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/20 16:39:36 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void Server::run_server(){
     
     getaddrinfo(NULL, this->_port.c_str(), &hints, &res);
     
+    int _bind;
     for(p = res; p != NULL; p = p->ai_next){
         this->_server_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
         if (this->_server_fd == -1){
@@ -108,17 +109,25 @@ void Server::run_server(){
             close(this->_server_fd);
             continue;
         }
-        
-        if (bind(this->_server_fd, p->ai_addr, p->ai_addrlen) == 0){
+        _bind = bind(this->_server_fd, p->ai_addr, p->ai_addrlen);
+        if (_bind == 0){
             break;
         }
         close(this->_server_fd);
     }
-
+    
+    if (_bind < 0){
+        freeaddrinfo(res);
+        close(this->_server_fd);
+        throw std::runtime_error("bind");
+    }
+    
     //Tornando o socket do servidor nao bloqueante.
     fcntl(this->_server_fd, F_SETFL, O_NONBLOCK);
 
     if (listen(this->_server_fd, 128) < 0){
+        freeaddrinfo(res);
+        close(this->_server_fd);
         throw std::runtime_error("listen");
     }
 
