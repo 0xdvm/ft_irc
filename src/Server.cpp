@@ -6,14 +6,14 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/19 10:57:23 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/20 11:07:38 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Server.hpp"
 
 #include <netdb.h>
-#include <string.h>
+#include <cstring>
 #include <unistd.h>
 #include <sys/socket.h>
 
@@ -90,7 +90,7 @@ void Server::run_server(){
     //Capturando o signal ctrl + c para sair do loop e encerrar adequadamente o programa.
     signal(SIGINT, Server::handle_monitoring);
 
-    memset(&hints, 0, sizeof(hints));
+    std::memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
