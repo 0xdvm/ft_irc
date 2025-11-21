@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/21 18:46:45 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/21 18:58:16 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ Channel& Server::findChannel(std::string& channel){
 }
 
 Channel& Server::createChannel(std::string& channel){
+    this->channels[channel] = Channel (channel);
     return (this->channels[channel]);    
 }
 
@@ -86,8 +87,8 @@ void Server::read_client(char* buffer, int size_buf, Client& client) {
 
     size_t pos;
     while ((pos = client.buffer.find("\r\n")) != std::string::npos 
-    // || (pos = client.buffer.find("\n")) 
-    != std::string::npos) 
+    // || (pos = client.buffer.find("\n")) != std::string::npos
+    ) 
     {
         // Extrai a mensagem até o final de linha
         std::string message = client.buffer.substr(0, pos);
