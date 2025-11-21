@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:34:20 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/19 10:57:00 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/21 18:30:41 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,34 @@
 #include <iostream>
 #include "Client.hpp"
 #include <map>
+#include "Channel.hpp"
 
 class Server{
   private:
-    int _server_fd;
-    std::string _servername;
-    std::string _port;
-    std::string _password;
-    std::map<int, Client> list_clients;
+    int                                       _server_fd;
+    std::string                               _servername;
+    std::string                               _port;
+    std::string                               _password;
+    std::map<int, Client>                     list_clients;
+    std::map<std::string, Channel>            channels;
     
-    static bool _monitoring;
+    static bool                               _monitoring;
+    
     static void handle_monitoring(int sigint);
     Client& get_client(int fd);
   public:
     Server(std::string servername, std::string port, std::string password);
-    ~Server(); 
+    ~Server();
+    
     
     std::string& get_password();
     std::string& get_Servername();
     std::map<int, Client> getListClient();
     Client& findUser(std::string&);
-    
-    void run_server();
+    Channel& findChannel(std::string& channel);
+    Channel& createChannel(std::string& channel);
+
     void read_client(char* buffer, int size_buf, Client& client);
+    void run_server();
 };
 #endif

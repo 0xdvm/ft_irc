@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/20 16:39:36 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/21 18:46:45 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,14 @@ std::string& Server::get_Servername(){
 std::map<int, Client> Server::getListClient(){
     return (this->list_clients);
 }
+
 Client& Server::findUser(std::string& nickname){
     std::map<int, Client>::iterator it = this->list_clients.begin();
 
-    while (it != this->list_clients.end()){
-        if (nickname.compare(it->second.getNickname()) == 0){
+    while (it != this->list_clients.end())
+    {
+        if (nickname.compare(it->second.getNickname()) == 0)
+        {
             return (it->second);
         }
         it++;
@@ -62,13 +65,30 @@ Client& Server::findUser(std::string& nickname){
     throw std::runtime_error("User not found");
 }
 
+Channel& Server::findChannel(std::string& channel){
+    std::map<std::string, Channel>::iterator it;
+
+    it = this->channels.find(channel);
+    if (it == this->channels.end())
+    {
+        throw std::runtime_error("Channel not found");
+    }
+    return (it->second);
+}
+
+Channel& Server::createChannel(std::string& channel){
+    return (this->channels[channel]);    
+}
+
 void Server::read_client(char* buffer, int size_buf, Client& client) {
     // Adiciona dados recebidos ao buffer do cliente
     client.buffer.append(buffer, size_buf);
 
     size_t pos;
-    while ((pos = client.buffer.find("\r\n")) != std::string::npos || 
-           (pos = client.buffer.find("\n")) != std::string::npos) {
+    while ((pos = client.buffer.find("\r\n")) != std::string::npos 
+    // || (pos = client.buffer.find("\n")) 
+    != std::string::npos) 
+    {
         // Extrai a mensagem até o final de linha
         std::string message = client.buffer.substr(0, pos);
         client.setMessage(message);
@@ -86,6 +106,7 @@ void Server::run_server(){
     std::cout << "Start server..." << std::endl;
     struct addrinfo hints, *res, *p;
     int epoll_fd;
+    int _bind;
     
     //Capturando o signal ctrl + c para sair do loop e encerrar adequadamente o programa.
     signal(SIGINT, Server::handle_monitoring);
@@ -97,26 +118,29 @@ void Server::run_server(){
     
     getaddrinfo(NULL, this->_port.c_str(), &hints, &res);
     
-    int _bind;
     for(p = res; p != NULL; p = p->ai_next){
         this->_server_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-        if (this->_server_fd == -1){
+        if (this->_server_fd == -1)
+        {
             continue;
         }
         int opt = 1;
         
-        if (setsockopt(this->_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0){
+        if (setsockopt(this->_server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
+        {
             close(this->_server_fd);
             continue;
         }
         _bind = bind(this->_server_fd, p->ai_addr, p->ai_addrlen);
-        if (_bind == 0){
+        if (_bind == 0)
+        {
             break;
         }
         close(this->_server_fd);
     }
     
-    if (_bind < 0){
+    if (_bind < 0)
+    {
         freeaddrinfo(res);
         close(this->_server_fd);
         throw std::runtime_error("bind");
@@ -125,7 +149,8 @@ void Server::run_server(){
     //Tornando o socket do servidor nao bloqueante.
     fcntl(this->_server_fd, F_SETFL, O_NONBLOCK);
 
-    if (listen(this->_server_fd, 128) < 0){
+    if (listen(this->_server_fd, 128) < 0)
+    {
         freeaddrinfo(res);
         close(this->_server_fd);
         throw std::runtime_error("listen");
@@ -145,21 +170,28 @@ void Server::run_server(){
     //Lista que serao adicionando os sockets que causaram evento ao servidor.
     struct epoll_event events[100];
 
-    while (Server::_monitoring){
+    while (Server::_monitoring)
+    {
         //Esperando sockets causarem eventos e retorna o numero de sockets que causarao eventos.
         int n = epoll_wait(epoll_fd, events, 100, -1);
 
-        for (int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++)
+        {
             // Se o evento foi feito para o servidor (quer dizer que um cliente tentou se conectar).
-            if (events[i].data.fd == this->_server_fd){
+            if (events[i].data.fd == this->_server_fd)
+            {
                 int client_fd = accept(this->_server_fd, NULL, NULL);
                 
                 
-                if (client_fd < 0){
-                    if (errno == EWOULDBLOCK || errno == EAGAIN) {
+                if (client_fd < 0)
+                {
+                    if (errno == EWOULDBLOCK || errno == EAGAIN) 
+                    {
                         // Não há clientes ainda, continue o loop
                         continue;
-                    } else {
+                    } 
+                    else 
+                    {
                         // Algum outro erro sério aconteceu
                         perror("accept");
                         continue;
@@ -182,7 +214,8 @@ void Server::run_server(){
                 //Adicionando o client na lista dos clientes.
                 this->list_clients[client_fd] = client;
             }
-            else{// Se for outro evento qualquer (cliente enviou mensagem, cliente se desconectou do serivdor).
+            else
+            {// Se for outro evento qualquer (cliente enviou mensagem, cliente se desconectou do serivdor).
 
                 char buffer[1024];
                 //Le a mensagem enviada ao servidor.
@@ -190,7 +223,8 @@ void Server::run_server(){
                 
                 //Se houver um erro ou desconecxao com o servidor.
                 int fd = events[i].data.fd; // use o fd correto
-                if (size_buf <= 0){
+                if (size_buf <= 0)
+                {
                     this->list_clients.erase(fd);
                     close(events[i].data.fd);
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
@@ -211,4 +245,3 @@ void Server::run_server(){
     close(this->_server_fd);
     close(epoll_fd);
 }
-
