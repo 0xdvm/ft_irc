@@ -6,7 +6,7 @@
 #    By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/05/08 12:51:48 by marcsilv          #+#    #+#              #
-#    Updated: 2025/11/17 19:59:34 by dvemba           ###   ########.fr        #
+#    Updated: 2025/11/21 17:41:13 by dvemba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,8 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 INC_DIR		= inc/
 
-SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp Parser.cpp commands/Command.cpp commands/PASS.cpp utils.cpp commands/CAP.cpp commands/NICK.cpp commands/USER.cpp commands/MODE.cpp commands/PING.cpp
-HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp Parser.hpp commands/Command.hpp commands/PASS.hpp utils.hpp commands/CAP.hpp commands/NICK.hpp commands/USER.hpp commands/MODE.hpp commands/PING.hpp
+SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp Parser.cpp commands/Command.cpp commands/PASS.cpp utils.cpp commands/CAP.cpp commands/NICK.cpp commands/USER.cpp commands/MODE.cpp commands/PING.cpp commands/PRIVMSG.cpp  Channel.cpp                                                                                      
+HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp Parser.hpp commands/Command.hpp commands/PASS.hpp utils.hpp commands/CAP.hpp commands/NICK.hpp commands/USER.hpp commands/MODE.hpp commands/PING.hpp commands/PRIVMSG.hpp  Channel.hpp 
 
 SRC			= $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ			= $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))
