@@ -6,11 +6,13 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/20 17:49:47 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/21 19:02:47 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Channel.hpp"
+
+Channel::Channel() : _channelName("") {}
 
 Channel::Channel(std::string channelName):_channelName(channelName){}
 

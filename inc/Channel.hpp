@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/20 17:49:44 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/21 19:02:19 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ class Channel{
         std::list<std::string>      _bannedList;
         int                         _memberNum;
     public:
+        Channel();
         Channel(std::string channelName);
         ~Channel();
         
