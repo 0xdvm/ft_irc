@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:34:20 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/21 18:30:41 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/24 20:25:46 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <iostream>
 #include "Client.hpp"
 #include <map>
+#include <list>
 #include "Channel.hpp"
 
 class Server{
@@ -25,7 +26,7 @@ class Server{
     std::string                               _port;
     std::string                               _password;
     std::map<int, Client>                     list_clients;
-    std::map<std::string, Channel>            channels;
+    std::list<Channel*>                        _channels;
     
     static bool                               _monitoring;
     
@@ -41,7 +42,7 @@ class Server{
     std::map<int, Client> getListClient();
     Client& findUser(std::string&);
     Channel& findChannel(std::string& channel);
-    Channel& createChannel(std::string& channel);
+    Channel& createChannel(std::string& channel, std::string password);
 
     void read_client(char* buffer, int size_buf, Client& client);
     void run_server();

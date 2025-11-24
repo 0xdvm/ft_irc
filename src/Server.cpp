@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/21 18:58:16 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/24 21:05:02 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,24 @@
 #include <errno.h>
 #include <stdio.h>
 
+#include <algorithm>
+
 #include "../inc/Parser.hpp"
 
 bool Server::_monitoring = true;  
 
 Server::Server(std::string servername, std::string port, std::string password):_servername(servername), _port(port), _password(password){}
 
-Server::~Server(){}
+Server::~Server()
+{
+    std::list<Channel *>::iterator it;
+    
+    for (it = this->_channels.begin(); it != this->_channels.end(); it++)
+    {
+        delete *it;
+    }
+    this->_channels.clear();
+}
 
 void Server::handle_monitoring(int sigint){
     (void)sigint;
@@ -66,19 +77,31 @@ Client& Server::findUser(std::string& nickname){
 }
 
 Channel& Server::findChannel(std::string& channel){
-    std::map<std::string, Channel>::iterator it;
+    std::list< Channel*>::iterator it;
 
-    it = this->channels.find(channel);
-    if (it == this->channels.end())
+    it = this->_channels.begin();
+    while (it != this->_channels.end())
     {
-        throw std::runtime_error("Channel not found");
+        if ((*it)->getChannelName() == channel)
+        {
+            return (*(*it));
+        }
+        it++;
     }
-    return (it->second);
+    throw std::runtime_error("Channel not found");
 }
 
-Channel& Server::createChannel(std::string& channel){
-    this->channels[channel] = Channel (channel);
-    return (this->channels[channel]);    
+Channel& Server::createChannel(std::string& channel, std::string password){
+    // this->channels[channel] = Channel (channel);
+    if (password.empty()){
+        
+        Channel *chl = new Channel(channel);
+        this->_channels.push_back(chl);
+        return (*chl);    
+    }
+    Channel *chl = new Channel(channel, password);
+    this->_channels.push_back(chl);
+    return (*chl);    
 }
 
 void Server::read_client(char* buffer, int size_buf, Client& client) {
