@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/21 19:02:47 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/24 15:16:58 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,17 @@ Channel::Channel(std::string channelName):_channelName(channelName){}
 
 Channel::~Channel(){}
 
-void Channel::joinChannel(std::string nickname){
+void Channel::joinChannel(Client& client){
     
-    this->addMember(nickname);
+    this->addMember(client);
     
     if (this->getMemberNum() == 1){
-        this->addOperator(nickname);
+        this->addOperator(client.getNickname());
     }
 }
 
-void Channel::addMember(std::string& nickname){
-    this->_memberList.push_back(nickname);
+void Channel::addMember(Client& client){
+    this->_memberList.push_back(client);
 }
 
 void Channel::addOperator(std::string nickname){
@@ -48,10 +48,10 @@ std::string Channel::getChannelName(){
 }
 
 bool Channel::isMember(std::string nickname){
-    std::list<std::string>::iterator it = this->_memberList.begin();
+    std::list<Client>::iterator it = this->_memberList.begin();
 
     while (it != this->_memberList.end()){
-        if (it->compare(nickname) == 0){
+        if (it->getNickname() == nickname){
             return (true);
         }
         it++;

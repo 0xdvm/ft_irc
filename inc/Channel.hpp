@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/21 19:02:19 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/24 15:15:39 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class Channel{
         std::string                 _password;
         std::string                 _topic;
         std::list<std::string>      _operatorsList;
-        std::list<std::string>      _memberList;
+        std::list<Client>      _memberList;
         std::list<std::string>      _bannedList;
         int                         _memberNum;
     public:
@@ -31,9 +31,9 @@ class Channel{
         Channel(std::string channelName);
         ~Channel();
         
-        void joinChannel(std::string nickname);
-        void            addOperator(std::string nickname);
-        void            addMember(std::string& nickaname);
+        void joinChannel(Client&);
+        void            addOperator(std::string);
+        void            addMember(Client&);
         std::string     getChannelName();
 
         void            setMemberNum(int num);
