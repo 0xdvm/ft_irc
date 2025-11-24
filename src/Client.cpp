@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:49:57 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/15 18:44:10 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/24 20:52:50 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,10 @@ std::string Client::getHost(){
 }
 std::string Client::getServername(){
     return (this->_servername);
+}
+
+std::string Client::userMask(){
+    return (this->_nickname + "!" + this->_username + "@" + this->_host);
 }
 
 //Setters

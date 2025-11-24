@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/09 20:25:00 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/15 18:45:32 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/24 20:52:07 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ class Client{
         std::string getMessage();
         std::string getHost();
         std::string getServername();
+        std::string userMask();
         
         void setPass(bool v);
         void setNick(bool v);
