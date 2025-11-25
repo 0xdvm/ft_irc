@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:48:07 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/19 09:44:07 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/25 20:29:36 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void PING::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Not enough parameters");
         return;
     }
-    std::string reply = ":PONG " + args[0] + "\r\n";
-    send(client_ref.get_fd(), reply.c_str(), reply.size(), 0);
-    // send_irc_reply(client_ref, server_ref.get_Servername(), "", "","PONG " + args[0]);
+    std::string reply = "PONG " + args[0] + "\r\n";
+    std::cout << reply << std::endl;
+    // send(client_ref.get_fd(), reply.c_str(), reply.size(), 0);
+    send_irc_reply(client_ref, server_ref.get_Servername(), "PONG", server_ref.get_Servername(), args[0]);
 }
