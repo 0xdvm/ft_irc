@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:32:04 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/24 20:58:29 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/25 17:50:01 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ JOIN::JOIN(): Command(2) {}
 
 JOIN::~JOIN(){}
 
-void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
+void JOIN::showInfo()
+{
+    
+}
+
+void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args)
+{
     int size_args = args.size();
     std::string target = client_ref.getNickname();
     
@@ -37,10 +43,10 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         try
         {
             Channel& channel = server_ref.findChannel(args[0]);
-            std::cout << "Ja existe este canal" << std::endl;
+            // std::cout << "Ja existe este canal" << std::endl;
             if (channel.hasPassword())
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target, "Cannot join channel (+k) - bad key");
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target + " " + channel.getChannelName(), "Cannot join channel (+k) - bad key");
                 return;
             }
             if (channel.isMember(client_ref.getNickname()))
@@ -48,14 +54,20 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                 return;
             } 
             channel.joinChannel(client_ref);
+            if (channel.hasTopic())
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "Este é o tópico do canal");
+            else
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "No topic is set");
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
+            send_irc_reply(client_ref, server_ref.get_password(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
         }
         catch(const std::exception& e)
         {            
             Channel& channel =  server_ref.createChannel(args[0], "");
-            std::cout << "Nao existe este canal" << std::endl;
+            // std::cout << "Nao existe este canal" << std::endl;
             if (channel.hasPassword())
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target, "Cannot join channel (+k) - bad key");
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target + " " + channel.getChannelName(), "Cannot join channel (+k) - bad key");
                 return;
             }
             if (channel.isMember(client_ref.getNickname()))
@@ -63,6 +75,13 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                 return;
             } 
             channel.joinChannel(client_ref);
+            if (channel.hasTopic())
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "Este é o tópico do canal");
+            else
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "No topic is set");
+            
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
+            send_irc_reply(client_ref, server_ref.get_password(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
         }
     }
     else
@@ -72,7 +91,7 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             Channel &channel = server_ref.findChannel(args[0]);
             if (!channel.isCorrectpassword(args[1]))
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target, "Cannot join channel (+k) - bad key");
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target + " " + channel.getChannelName(), "Cannot join channel (+k) - bad key");
                 return;
             }
             if (channel.isMember(client_ref.getNickname()))
