@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/25 17:45:27 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/27 17:19:50 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,112 @@ void Channel::addMember(std::string nickname, Client& client)
     this->_memberNum++;
 }
 
+void Channel::setMemberNum(int num)
+{
+    this->_memberNum = num;
+}
+
+void Channel::sendBroadcast(std::string command, std::string tosend, Client& client)
+{
+    std::map<std::string, Client>::iterator it = this->_memberList.begin();
+
+    while (it != this->_memberList.end())
+    {
+        if (it->second.getNickname().compare(client.getNickname()) != 0)
+        {
+            send_irc_reply(it->second, client.userMask(), command, this->getChannelName(), tosend);
+        }
+        it++;
+    }
+}
+
+void  Channel::setTopic(std::string nickname, std::string topic)
+{
+    Client & client = this->getClient(nickname);
+    if (topic.empty())
+    {
+        this->_topic = topic;
+        this->_hasTopic = false;
+        return;
+    }
+    if (isOperator(nickname))
+    {
+        this->_topic = topic;
+        this->_hasTopic = true;
+    }
+    else
+    {
+        send_irc_reply(client, client.getServername(), ERR_CHANOPRIVSNEEDED, client.getNickname(), "You're not channel operator");
+    }
+}
+
+void Channel::addInviteList(std::string nickname)
+{
+    this->_inviteList.push_back(nickname);
+}
+
+void Channel::removeInviteList(std::string nickname)
+{
+    std::list<std::string>::iterator it = this->_inviteList.begin();
+
+    while (it != this->_inviteList.end())
+    {
+        if (it->compare(nickname) == 0)
+        {
+            this->_inviteList.erase(it);
+            break;
+        }
+        it++;
+    }
+}
+
+void Channel::setInvite(std::string nickname, std::string nickaname_dest)
+{
+    Client &client_dest = this->getClient(nickaname_dest);
+    Client & client_send = this->getClient(nickname);
+    if (this->isOperator(nickname))
+    {
+        this->addInviteList(nickaname_dest);
+        send_irc_reply(client_dest, nickname, client_send.userMask(), "INVITE", this->_channelName);
+    }
+    else
+    {
+        send_irc_reply(client_send, client_send.getServername(), ERR_CHANOPRIVSNEEDED, client_send.getNickname(), "You're not channel operator");
+    }
+}
+
+Client& Channel::getClient(std::string nickname)
+{
+    std::map<std::string, Client>::iterator it = this->_memberList.begin();
+
+    while (it != this->_memberList.end())
+    {
+        if (it->second.getNickname().compare(nickname) == 0)
+        {
+            return (it->second);
+        }
+        it++;
+    }
+    throw std::runtime_error("User not found");
+}
+
+bool Channel::isOperator(std::string nickname)
+{
+    std::map<std::string, Client>::iterator it = this->_memberList.begin();
+    
+    while (it != this->_memberList.end())
+    {
+        if (it->second.getNickname().compare(nickname) == 0)
+        {
+            if (it->first.compare("@" + nickname) == 0){
+                return (true);
+            }
+        }
+        it++;
+    }
+    return (false);
+}
+
 bool Channel::addOperator(std::string nickname)
 {
     Client client;
@@ -62,11 +168,6 @@ bool Channel::addOperator(std::string nickname)
     return(false);
 }
 
-void Channel::setMemberNum(int num)
-{
-    this->_memberNum = num;
-}
-
 int Channel::getMemberNum()
 {
     return (this->_memberNum);
@@ -78,44 +179,33 @@ std::string Channel::getChannelName(){
 
 bool Channel::isMember(std::string nickname)
 {
-    std::map<std::string, Client>::iterator it;
+    std::map<std::string, Client>::iterator it = this->_memberList.begin();
     
-    it = this->_memberList.find(nickname);
+    // it = this->_memberList.find(nickname);
     
-    if (it != this->_memberList.end())
-    {
-        return (true);
-    }
-    // std::map<Client>::iterator it = this->_memberList.begin();
-
-    // while (it != this->_memberList.end()){
-    //     if (it->getNickname() == nickname){
-    //         return (true);
-    //     }
-    //     it++;
+    // if (it != this->_memberList.end())
+    // {
+    //     return (true);
     // }
+    // std::map<Client>::iterator it = this->_memberList.begin();
+    
+    while (it != this->_memberList.end()){
+    if (it->second.getNickname() == nickname){
+            return (true);
+        }
+        it++;
+    }
     return (false);
 }
-
+        
 bool Channel::hasPassword()
 {
     return (this->_hasPassword);
 }
-
+        
 bool Channel::hasTopic()
 {
     return (this->_hasTopic);
-}
-
-void Channel::sendBroadcast(std::string command, std::string tosend, Client& client)
-{
-    std::map<std::string, Client>::iterator it = this->_memberList.begin();
-
-    while (it != this->_memberList.end())
-    {
-        send_irc_reply(it->second, client.userMask(), command, this->getChannelName(), tosend);
-        it++;
-    }
 }
 
 bool Channel::isCorrectpassword(std::string password)
@@ -127,17 +217,6 @@ bool Channel::isCorrectpassword(std::string password)
     return (false);
 }
 
-void  Channel::setTopic(std::string topic)
-{
-    if (topic.empty())
-    {
-        this->_topic = topic;
-        this->_hasTopic = false;
-        return;
-    }
-    this->_topic = topic;
-    this->_hasTopic = true;
-}
 
 std::string Channel::getListmember(){
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
