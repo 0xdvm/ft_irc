@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 09:47:27 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/19 16:17:39 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/11/27 17:01:50 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,14 @@ void PRIVMSG::run_command(Server& server_ref, Client& client_ref, std::vector<st
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, client_ref.getNickname(), "Not enough parameters");
         return;
     }
-    if (args[0] != "#"){
+    if (args[0].at(0) != '#'){
         
-        try{
+        try
+        {
             Client& client = server_ref.findUser(args[0]);
 
-            if (!client.isAuthenticated()){
+            if (!client.isAuthenticated())
+            {
                 return;
             }
             std::string target = client.getNickname();
@@ -39,11 +41,29 @@ void PRIVMSG::run_command(Server& server_ref, Client& client_ref, std::vector<st
             
             send_irc_reply(client, emissor, "PRIVMSG", target, message);
         }
-        catch(const std::exception& e){
+        catch(const std::exception& e)
+        {
             send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHNICK, args[0], "No such nick");
         }
-        return;
     }
-    std::cout << "Estou aqui, nao se preocupe" << std::endl;
+    else
+    {
+        try
+        {
+            Channel channel = server_ref.findChannel(args[0]);
+            if (!channel.isMember(client_ref.getNickname()))
+            {
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CANNOTSENDTOCHAN, client_ref.getNickname() + " " + channel.getChannelName(), "Cannot send to channel");
+                return;
+            }
+            channel.sendBroadcast("PRIVMSG", args[1], client_ref);
+            
+        }
+        catch(const std::exception& e)
+        {
+            send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, args[0], "No such channel");
+        }
+    }
+    // std::cout << "Estou aqui, nao se preocupe" << std::endl;
     
 }
