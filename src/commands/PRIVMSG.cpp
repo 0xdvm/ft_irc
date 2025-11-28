@@ -56,7 +56,7 @@ void PRIVMSG::run_command(Server& server_ref, Client& client_ref, std::vector<st
                 send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CANNOTSENDTOCHAN, client_ref.getNickname() + " " + channel.getChannelName(), "Cannot send to channel");
                 return;
             }
-            channel.sendBroadcast("PRIVMSG", args[1], client_ref);
+            channel.sendBroadcast("PRIVMSG", args[1], client_ref, false);
             
         }
         catch(const std::exception& e)
