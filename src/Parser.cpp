@@ -23,6 +23,7 @@
 #include "../inc/commands/PING.hpp"
 #include "../inc/commands/PRIVMSG.hpp"
 #include "../inc/commands/JOIN.hpp"
+#include "../inc/commands/PART.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -65,8 +66,9 @@ std::map<std::string, Command *> Parser::get_list_commands(){
     commands["USER"]    = new USER();
     commands["MODE"]    = new MODE();
     commands["PING"]    = new PING();
-    commands["PRIVMSG"] = new PRIVMSG();
-    commands["JOIN"] = new JOIN();
+    commands["PRIVMSG"] = new PRIVMSG();                                                 
+    commands["JOIN"]    = new JOIN();
+    commands["PART"]    = new PART();
     return (commands);
 }
 
