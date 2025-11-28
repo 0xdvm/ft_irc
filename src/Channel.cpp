@@ -31,7 +31,7 @@ void Channel::joinChannel(Client& client)
         this->addOperator(client.getNickname());
     }
     std::string tosend = "has joined " + this->getChannelName();
-    this->sendBroadcast("JOIN", tosend, client);
+    this->sendBroadcast("JOIN", tosend, client, true);
     // this->sendBroadcast()
 }
 
@@ -41,18 +41,33 @@ void Channel::addMember(std::string nickname, Client& client)
     this->_memberNum++;
 }
 
+void Channel::removeMember(std::string nickname)
+{
+    std::map<std::string, Client>::iterator it = this->_memberList.begin();
+
+    while (it != this->_memberList.end()){
+
+        if (it->second.getNickname().compare(nickname) == 0)
+        {
+            this->_memberList.erase(it->first);
+            return;
+        }
+        it++;
+    }
+}
+
 void Channel::setMemberNum(int num)
 {
     this->_memberNum = num;
 }
 
-void Channel::sendBroadcast(std::string command, std::string tosend, Client& client)
+void Channel::sendBroadcast(std::string command, std::string tosend, Client& client, bool isSendSelf)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
 
     while (it != this->_memberList.end())
     {
-        if (it->second.getNickname().compare(client.getNickname()) != 0)
+        if ((it->second.getNickname().compare(client.getNickname()) != 0 || isSendSelf))
         {
             send_irc_reply(it->second, client.userMask(), command, this->getChannelName(), tosend);
         }
