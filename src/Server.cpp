@@ -104,6 +104,20 @@ Channel& Server::createChannel(std::string& channel, std::string password){
     return (*chl);    
 }
 
+void Server::removeChannel(std::string channel){
+    std::list< Channel*>::iterator it;
+
+    it = this->_channels.begin();
+    while (it != this->_channels.end())
+    {
+        if ((*it)->getChannelName() == channel)
+        {
+            this->_channels.erase(it);
+        }
+        it++;
+    }
+}
+
 void Server::read_client(char* buffer, int size_buf, Client& client) {
     // Adiciona dados recebidos ao buffer do cliente
     client.buffer.append(buffer, size_buf);
