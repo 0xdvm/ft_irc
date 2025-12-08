@@ -87,7 +87,7 @@ void TOPIC::run_command(Server& server_ref, Client& client_ref, std::vector<std:
             channel.setTopic(topic);
             std::string tosend = channel.getTopic();
 
-            channel.sendBroadcast("TOPIC", tosend, client_ref);
+            channel.sendBroadcast("TOPIC", tosend, client_ref,true);
         }
         catch(const std::exception& e)
         {

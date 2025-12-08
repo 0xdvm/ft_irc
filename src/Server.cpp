@@ -61,6 +61,9 @@ std::string& Server::get_Servername(){
 std::map<int, Client> Server::getListClient(){
     return (this->list_clients);
 }
+std::list<Channel*>& Server::getListChannel(){
+    return(this->_channels);
+}
 
 Client& Server::findUser(std::string& nickname){
     std::map<int, Client>::iterator it = this->list_clients.begin();

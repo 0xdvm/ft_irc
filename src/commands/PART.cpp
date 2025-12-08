@@ -36,7 +36,7 @@ void PART::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             // send_irc_reply(client_ref, client_ref.userMask(), "PART", channel.getChannelName(), tosend);
             channel.sendBroadcast("PART", "", client_ref, true);
             channel.removeMember(client_ref.getNickname());
-            if (channel.getListmember().empty())
+            if (channel.getListmember().empty() || channel.getListmember() == " ")
             {
                 server_ref.removeChannel(channel.getChannelName());
             }
@@ -49,7 +49,7 @@ void PART::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         }
     }
 
-    if (size_args > 1 && args[1].at(0) == ':')
+    if (size_args > 1)
     {
         std::cout << args[1].at(0) << std::endl;
         try
