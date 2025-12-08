@@ -23,6 +23,7 @@
 #include "../inc/commands/PING.hpp"
 #include "../inc/commands/PRIVMSG.hpp"
 #include "../inc/commands/JOIN.hpp"
+#include "../inc/commands/TOPIC.hpp"
 #include "../inc/commands/PART.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
@@ -66,8 +67,9 @@ std::map<std::string, Command *> Parser::get_list_commands(){
     commands["USER"]    = new USER();
     commands["MODE"]    = new MODE();
     commands["PING"]    = new PING();
-    commands["PRIVMSG"] = new PRIVMSG();                                                 
+    commands["PRIVMSG"] = new PRIVMSG();
     commands["JOIN"]    = new JOIN();
+    commands["TOPIC"]   = new TOPIC();
     commands["PART"]    = new PART();
     return (commands);
 }
@@ -79,7 +81,7 @@ void Parser::Parser_start(Server& server_ref, Client& client_ref, std::string cm
 
     bool isCmdUSER = false;
 
-    if (cmd == "USER"){
+    if (cmd == "USER" || cmd == "TOPIC"){
         isCmdUSER = true;
     }
     //Listando os argumentos...

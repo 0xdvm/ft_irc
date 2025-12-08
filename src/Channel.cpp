@@ -75,23 +75,17 @@ void Channel::sendBroadcast(std::string command, std::string tosend, Client& cli
     }
 }
 
-void  Channel::setTopic(std::string nickname, std::string topic)
+void  Channel::setTopic(std::string topic)
 {
-    Client & client = this->getClient(nickname);
-    if (topic.empty())
+    if (topic.compare(":") == 0)
     {
-        this->_topic = topic;
+        this->_topic = "";
         this->_hasTopic = false;
-        return;
-    }
-    if (isOperator(nickname))
-    {
-        this->_topic = topic;
-        this->_hasTopic = true;
     }
     else
     {
-        send_irc_reply(client, client.getServername(), ERR_CHANOPRIVSNEEDED, client.getNickname(), "You're not channel operator");
+        this->_topic = topic;
+        this->_hasTopic = true;
     }
 }
 
@@ -233,7 +227,8 @@ bool Channel::isCorrectpassword(std::string password)
 }
 
 
-std::string Channel::getListmember(){
+std::string Channel::getListmember()
+{
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
     std::string list;
     
@@ -246,4 +241,9 @@ std::string Channel::getListmember(){
     }
     std::cout << "LIST OF: " << list << std::endl;
     return (list);
+}
+
+std::string Channel::getTopic()
+{
+    return (this->_topic);
 }

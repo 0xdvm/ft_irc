@@ -19,8 +19,8 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 INC_DIR		= inc/
 
-SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp Parser.cpp commands/Command.cpp commands/PASS.cpp utils.cpp commands/CAP.cpp commands/NICK.cpp commands/USER.cpp commands/MODE.cpp commands/PING.cpp commands/PRIVMSG.cpp  Channel.cpp commands/JOIN.cpp commands/PART.cpp                                                                              
-HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp Parser.hpp commands/Command.hpp commands/PASS.hpp utils.hpp commands/CAP.hpp commands/NICK.hpp commands/USER.hpp commands/MODE.hpp commands/PING.hpp commands/PRIVMSG.hpp  Channel.hpp commands/JOIN.hpp commands/PART.hpp
+SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp Parser.cpp commands/Command.cpp commands/PASS.cpp utils.cpp commands/CAP.cpp commands/NICK.cpp commands/USER.cpp commands/MODE.cpp commands/PING.cpp commands/PRIVMSG.cpp  Channel.cpp commands/JOIN.cpp commands/PART.cpp commands/TOPIC.cpp                                                                        
+HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp Parser.hpp commands/Command.hpp commands/PASS.hpp utils.hpp commands/CAP.hpp commands/NICK.hpp commands/USER.hpp commands/MODE.hpp commands/PING.hpp commands/PRIVMSG.hpp  Channel.hpp commands/JOIN.hpp commands/PART.hpp commands/TOPIC.hpp
 
 SRC			= $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ			= $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))

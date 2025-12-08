@@ -47,7 +47,7 @@ class Channel{
         void                                    removeInviteList(std::string nickanem);
         //                      
         void                                    setInvite(std::string nickname, std::string nickaname_dest);
-        void                                    setTopic(std::string nickname, std::string topic);
+        void                                    setTopic(std::string topic);
         void                                    setUserlimit(std::string nickname, int limit);
         void                                    setOperator(std::string nickname, std::string nickaname_dest, bool value);
                                 
@@ -61,6 +61,7 @@ class Channel{
         bool                                    isOperator(std::string nickname);
         std::string                             getChannelName();
         std::string                             getListmember();
+        std::string                             getTopic();
         int                                     getMemberNum();
 
 };

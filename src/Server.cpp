@@ -264,8 +264,8 @@ void Server::run_server(){
                 if (size_buf <= 0)
                 {
                     this->list_clients.erase(fd);
-                    close(events[i].data.fd);
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
+                    close(events[i].data.fd);
                     continue;
                 }
                 this->read_client(buffer, size_buf, this->get_client(fd));
@@ -280,6 +280,6 @@ void Server::run_server(){
         close(it->first);
     
     freeaddrinfo(res);
-    close(this->_server_fd);
     close(epoll_fd);
+    close(this->_server_fd);
 }
