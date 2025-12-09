@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:32:04 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/25 17:50:01 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/09 12:33:03 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             } 
             channel.joinChannel(client_ref);
             if (channel.hasTopic())
-                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "Este é o tópico do canal");
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), channel.getTopic());
             else
-                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "No topic is set");
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "");
             send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
             send_irc_reply(client_ref, server_ref.get_password(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
         }
@@ -76,9 +76,9 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             } 
             channel.joinChannel(client_ref);
             if (channel.hasTopic())
-                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "Este é o tópico do canal");
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), channel.getTopic());
             else
-                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "No topic is set");
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "");
             
             send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
             send_irc_reply(client_ref, server_ref.get_password(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
