@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PART.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgouveia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 19:05:29 by cgouveia          #+#    #+#             */
+/*   Updated: 2025/12/09 19:05:34 by cgouveia         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/commands/PART.hpp"
 #include "../../inc/utils.hpp"
 #include "../../inc/Channel.hpp"
@@ -36,7 +48,7 @@ void PART::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             // send_irc_reply(client_ref, client_ref.userMask(), "PART", channel.getChannelName(), tosend);
             channel.sendBroadcast("PART", "", client_ref, true);
             channel.removeMember(client_ref.getNickname());
-            if (channel.getListmember().empty() || channel.getListmember() == " ")
+            if (channel.getListmember().empty())
             {
                 server_ref.removeChannel(channel.getChannelName());
             }
