@@ -6,18 +6,19 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/27 17:19:50 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/09 11:43:59 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Channel.hpp"
 #include "../inc/utils.hpp"
+#include <sstream>
 
-Channel::Channel() : _channelName("") {}
+Channel::Channel() : _channelName(""), _password(""), _topic(""), _topic_by(""), _hasPassword(false), _hasTopic(false), _memberNum(0), _topic_time(0) {}
 
-Channel::Channel(std::string channelName):_channelName(channelName), _password(""), _topic(""), _memberNum(0), _hasPassword(false), _hasTopic(false){}
+Channel::Channel(std::string channelName):_channelName(channelName), _password(""), _topic(""), _topic_by(""), _hasPassword(false), _hasTopic(false), _memberNum(0), _topic_time(0){}
 
-Channel::Channel(std::string channelName, std::string password):_channelName(channelName), _password(password), _topic(""), _memberNum(0), _hasPassword(true), _hasTopic(false){}
+Channel::Channel(std::string channelName, std::string password):_channelName(channelName), _password(password), _topic(""), _topic_by(""), _hasPassword(true), _hasTopic(false), _memberNum(0), _topic_time(0){}
 
 Channel::~Channel(){}
 
@@ -107,6 +108,15 @@ void Channel::setInvite(std::string nickname, std::string nickaname_dest)
     {
         send_irc_reply(client_send, client_send.getServername(), ERR_CHANOPRIVSNEEDED, client_send.getNickname(), "You're not channel operator");
     }
+}
+void Channel::setTopicby(std::string nick)
+{
+    this->_topic_by = nick; 
+}
+
+void Channel::setTopicTime(long int time)
+{
+    this->_topic_time = time;
 }
 
 Client& Channel::getClient(std::string nickname)
@@ -231,4 +241,16 @@ std::string Channel::getListmember()
 std::string Channel::getTopic()
 {
     return (this->_topic);
+}
+
+std::string Channel::getTopicby()
+{
+    return (this->_topic_by);
+}
+
+std::string Channel::getTopicTime()
+{
+    std::stringstream ss;
+    ss << this->_topic_time;
+    return (ss.str());
 }

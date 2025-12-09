@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/27 12:32:06 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/09 11:26:58 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,17 @@ class Channel{
         std::string                             _channelName;
         std::string                             _password;
         std::string                             _topic;
+        std::string                             _topic_by;
         std::map<std::string, Client>           _memberList;
         std::list<std::string>                  _inviteList;
-        int                                     _memberNum;
-
+        
         //Modos
         bool                                    _inviteOnly;
         bool                                    _hasPassword;
         bool                                    _hasTopic; 
         int                                     _userLimit;     
+        int                                     _memberNum;
+        long int                                _topic_time;
 
     public:
         Channel();
@@ -50,17 +52,21 @@ class Channel{
         void                                    setTopic(std::string topic);
         void                                    setUserlimit(std::string nickname, int limit);
         void                                    setOperator(std::string nickname, std::string nickaname_dest, bool value);
-                                
-        Client&                                 getClient(std::string nickname);
+        void                                    setTopicby(std::string nick);
+        void                                    setTopicTime(long int time);
+        
         bool                                    addOperator(std::string);
         bool                                    isMember(std::string nickname);
         bool                                    isCorrectpassword(std::string password);
         bool                                    hasPassword();
         bool                                    hasTopic();
         bool                                    isOperator(std::string nickname);
+        Client&                                 getClient(std::string nickname);
         std::string                             getChannelName();
         std::string                             getListmember();
         std::string                             getTopic();
+        std::string                             getTopicby();
+        std::string                             getTopicTime();
         int                                     getMemberNum();
 
 };
