@@ -63,7 +63,6 @@ void PART::run_command(Server& server_ref, Client& client_ref, std::vector<std::
 
     if (size_args > 1)
     {
-        std::cout << args[1].at(0) << std::endl;
         try
         {
             Channel& channel = server_ref.findChannel(args[0]);

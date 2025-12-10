@@ -115,9 +115,13 @@ void Server::removeChannel(std::string channel){
     {
         if ((*it)->getChannelName() == channel)
         {
-            this->_channels.erase(it);
+            Channel *n_it = *it;
+            it = this->_channels.erase(it);
+            delete n_it;
+            return;
         }
-        it++;
+        else
+            it++;
     }
 }
 

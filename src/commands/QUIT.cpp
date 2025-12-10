@@ -31,6 +31,7 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             std::list<Channel *>::iterator it = server_ref.getListChannel().begin();
             while (it != server_ref.getListChannel().end())
             {
+                int i = 0;
                 Channel* channel = *it;
 
                 if (channel->isMember(client_ref.getNickname()))
@@ -41,10 +42,13 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     channel->removeMember(client_ref.getNickname());
                     if (channel->getListmember().empty())
                     {
+                        i = 1;
+                        it++;
                         server_ref.removeChannel(channel->getChannelName());
                     }
                 }
-                it++;
+                if (i == 0)
+                    it++;
             }
             close(client_ref.get_fd());
         }
@@ -62,6 +66,7 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             std::list<Channel *>::iterator it = server_ref.getListChannel().begin();
             while (it != server_ref.getListChannel().end())
             {
+                int i = 0;
                 Channel* channel = *it;
 
                 if (channel->isMember(client_ref.getNickname()))
@@ -72,10 +77,13 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     channel->removeMember(client_ref.getNickname());
                     if (channel->getListmember().empty())
                     {
+                        i = 1;
+                        it++;
                         server_ref.removeChannel(channel->getChannelName());
                     }
                 }
-                it++;
+                if (i == 0)
+                    it++;
             }
             close(client_ref.get_fd());
         }
