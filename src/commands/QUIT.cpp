@@ -29,7 +29,6 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         try
         {
             std::list<Channel *>::iterator it = server_ref.getListChannel().begin();
-            int i = 0;
             while (it != server_ref.getListChannel().end())
             {
                 Channel* channel = *it;
@@ -44,15 +43,10 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     {
                         server_ref.removeChannel(channel->getChannelName());
                     }
-                    if (i == 0)
-                    {
-                        i = 1;
-                        close(client_ref.get_fd());
-                    }
                 }
                 it++;
             }
-            
+            close(client_ref.get_fd());
         }
         catch(const std::exception& e)
         {
@@ -66,7 +60,6 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         try
         {
             std::list<Channel *>::iterator it = server_ref.getListChannel().begin();
-            int i = 0;
             while (it != server_ref.getListChannel().end())
             {
                 Channel* channel = *it;
@@ -81,15 +74,10 @@ void QUIT::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     {
                         server_ref.removeChannel(channel->getChannelName());
                     }
-                    if (i == 0)
-                    {
-                        i = 1;
-                        close(client_ref.get_fd());
-                    }
                 }
                 it++;
             }
-            
+            close(client_ref.get_fd());
         }
         catch(const std::exception& e)
         {
