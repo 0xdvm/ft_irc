@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 18:37:16 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/09 11:57:38 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/10 17:39:19 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sys/socket.h>
 #include <sstream>
 #include <iomanip>
+#include <ctime>
 
 TOPIC::TOPIC():Command(2){}
 
@@ -51,14 +52,7 @@ void TOPIC::run_command(Server& server_ref, Client& client_ref, std::vector<std:
                 return;
             }
             else
-            {
-                // std::string send = RPL_TOPIC + " " + target + " " + channel.getChannelName() + " :" + channel.getTopic() + "\r\n";
-                // std::string toSend = RPL_TOPIC + " " + target + " " + channel.getChannelName() + " :" + channel.getTopic() + "\r\n";
-                
-                
-                // :server 332 <nick> <canal> :<tópico atual>
-                // :server 333 <nick> <canal> <set_by> <timestamp>
-                
+            {                
                 std::string dest = target + " " + channel.getChannelName();
                 send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, dest, channel.getTopic());
                 
@@ -67,8 +61,6 @@ void TOPIC::run_command(Server& server_ref, Client& client_ref, std::vector<std:
                 
                 std::string toSend = ":" + server_ref.get_Servername() + " " + ss.str() + " " + target + " " + channel.getChannelName() + " " + channel.getTopicby() + " " + channel.getTopicTime() + "\r\n";
                 send(client_ref.get_fd(), toSend.c_str(), toSend.size(), 0);
-                
-                // send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPICWHOTIME,  )
                 return;
             }
         }
@@ -87,20 +79,22 @@ void TOPIC::run_command(Server& server_ref, Client& client_ref, std::vector<std:
 
             if (!channel.isMember(target))
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTONCHANNEL, target, "You're not on that channel");
+                std::string dest = target + " " + channel.getChannelName();
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTONCHANNEL, dest, "You're not on that channel");
                 return;
             }
 
             if(!channel.isOperator(target))
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CHANOPRIVSNEEDED, target + " " + channel.getChannelName(),"You're not a channel operator");
+                std::string dest =  channel.getChannelName() + " " + target;     
+                //:<servername> <code>  <channel> <nick> <:message>          
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CHANOPRIVSNEEDED, dest, "You're not a channel operator");
                 return;
             }
             std::string topic;
             if (args[1].at(0) == ':')
             {
                 topic = args[1].substr(1);
-                std::cout << "STRING: " << topic << std::endl;
             }
             else
             {
@@ -109,7 +103,10 @@ void TOPIC::run_command(Server& server_ref, Client& client_ref, std::vector<std:
             channel.setTopic(topic);
             channel.setTopicby(client_ref.userMask());
             
-            channel.setTopicTime(125289382);
+            time_t now = time(NULL);
+            long int now_int = (long int)now;
+            
+            channel.setTopicTime(now_int);
             std::string tosend = channel.getTopic();
 
             channel.sendBroadcast("TOPIC", tosend, client_ref);
