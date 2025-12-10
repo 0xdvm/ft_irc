@@ -32,7 +32,7 @@ void Channel::joinChannel(Client& client)
         this->addOperator(client.getNickname());
     }
     std::string tosend = "has joined " + this->getChannelName();
-    this->sendBroadcast("JOIN", tosend, client);
+    this->sendBroadcast("JOIN", tosend, client, true);
     // this->sendBroadcast()
 }
 
@@ -42,18 +42,47 @@ void Channel::addMember(std::string nickname, Client& client)
     this->_memberNum++;
 }
 
+void Channel::removeMember(std::string nickname)
+{
+    std::map<std::string, Client>::iterator it = this->_memberList.begin();
+
+    while (it != this->_memberList.end()){
+
+        if (it->second.getNickname().compare(nickname) == 0)
+        {
+            this->_memberList.erase(it->first);
+            return;
+        }
+        it++;
+    }
+}
+
 void Channel::setMemberNum(int num)
 {
     this->_memberNum = num;
 }
 
-void Channel::sendBroadcast(std::string command, std::string tosend, Client& client)
+void Channel::sendBroadcastQuit(std::string command, std::string tosend, Client& client, bool isSendSelf)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
 
     while (it != this->_memberList.end())
     {
-        if (it->second.getNickname().compare(client.getNickname()) != 0)
+        if ((it->second.getNickname().compare(client.getNickname()) != 0 || isSendSelf))
+        {
+            send_irc_reply(it->second, client.userMask(), command, "", tosend);
+        }
+        it++;
+    }
+}
+
+void Channel::sendBroadcast(std::string command, std::string tosend, Client& client, bool isSendSelf)
+{
+    std::map<std::string, Client>::iterator it = this->_memberList.begin();
+
+    while (it != this->_memberList.end())
+    {
+        if ((it->second.getNickname().compare(client.getNickname()) != 0 || isSendSelf))
         {
             send_irc_reply(it->second, client.userMask(), command, this->getChannelName(), tosend);
         }
@@ -224,14 +253,17 @@ bool Channel::isCorrectpassword(std::string password)
 
 std::string Channel::getListmember()
 {
+    if (this->_memberList.empty())
+        return std::string();
+    
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
     std::string list;
     
-    list = it->first;
-    it++;
     while(it != this->_memberList.end())
     {
-        list.append(" " + it->first);
+        if (it != this->_memberList.begin())
+            list.push_back(' ');
+        list += it->first;
         it++;
     }
     std::cout << "LIST OF: " << list << std::endl;

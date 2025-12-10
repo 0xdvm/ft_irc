@@ -61,6 +61,9 @@ std::string& Server::get_Servername(){
 std::map<int, Client> Server::getListClient(){
     return (this->list_clients);
 }
+std::list<Channel*>& Server::getListChannel(){
+    return(this->_channels);
+}
 
 Client& Server::findUser(std::string& nickname){
     std::map<int, Client>::iterator it = this->list_clients.begin();
@@ -102,6 +105,24 @@ Channel& Server::createChannel(std::string& channel, std::string password){
     Channel *chl = new Channel(channel, password);
     this->_channels.push_back(chl);
     return (*chl);    
+}
+
+void Server::removeChannel(std::string channel){
+    std::list< Channel*>::iterator it;
+
+    it = this->_channels.begin();
+    while (it != this->_channels.end())
+    {
+        if ((*it)->getChannelName() == channel)
+        {
+            Channel *n_it = *it;
+            it = this->_channels.erase(it);
+            delete n_it;
+            return;
+        }
+        else
+            it++;
+    }
 }
 
 void Server::read_client(char* buffer, int size_buf, Client& client) {

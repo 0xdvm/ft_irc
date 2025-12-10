@@ -43,7 +43,8 @@ class Channel{
         
         void                                    joinChannel(Client&);
         void                                    addMember(std::string nickname, Client&);
-        void                                    sendBroadcast(std::string command, std::string tosend, Client& client);
+        void                                    sendBroadcast(std::string command, std::string tosend, Client& client, bool isSendSelf);
+        void                                    sendBroadcastQuit(std::string command, std::string tosend, Client& client, bool isSendSelf);
         void                                    setMemberNum(int num);
         void                                    addInviteList(std::string nickname);
         void                                    removeInviteList(std::string nickanem);
@@ -57,6 +58,7 @@ class Channel{
         
         bool                                    addOperator(std::string);
         bool                                    isMember(std::string nickname);
+        void                                    removeMember(std::string nickname);
         bool                                    isCorrectpassword(std::string password);
         bool                                    hasPassword();
         bool                                    hasTopic();

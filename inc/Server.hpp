@@ -40,9 +40,11 @@ class Server{
     std::string& get_password();
     std::string& get_Servername();
     std::map<int, Client> getListClient();
+    std::list<Channel*>& getListChannel();
     Client& findUser(std::string&);
     Channel& findChannel(std::string& channel);
     Channel& createChannel(std::string& channel, std::string password);
+    void removeChannel(std::string channel);
 
     void read_client(char* buffer, int size_buf, Client& client);
     void run_server();
