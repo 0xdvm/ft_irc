@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 20:38:59 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/14 10:17:15 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/09 11:21:38 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ enum NumericReply
     RPL_CHANNELMODEIS     = 324,
     RPL_NOTOPIC           = 331,
     RPL_TOPIC             = 332,
+    RPL_TOPICWHOTIME      = 333,
 
     RPL_INVITING          = 341,
     RPL_SUMMONING         = 342,

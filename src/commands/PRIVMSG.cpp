@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 09:47:27 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/27 17:01:50 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/09 12:54:07 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,7 @@ void PRIVMSG::run_command(Server& server_ref, Client& client_ref, std::vector<st
             }
             std::string target = client.getNickname();
             std::string message = args[1];
-            std::string emissor = client_ref.getNickname()
-            + "!" + client_ref.getUsername() + "@" + client_ref.getServername();
+            std::string emissor = client_ref.userMask();
             
             send_irc_reply(client, emissor, "PRIVMSG", target, message);
         }
