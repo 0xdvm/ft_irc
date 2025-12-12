@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:17:53 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/17 19:21:58 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/12 20:48:47 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,13 @@
 
 #include "Command.hpp"
 class MODE: public Command{
+    private:
+        std::vector<std::string> arguments_modes;
+        std::vector<std::string> list_modes;
     public:
         MODE();
         ~MODE();
+        void validateModes(std::vector<std::string> args);
         void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
 };
 #endif
