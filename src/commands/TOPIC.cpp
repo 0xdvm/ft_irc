@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/28 18:37:16 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 12:37:25 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 16:10:35 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,13 @@ void TOPIC::run_command(Server& server_ref, Client& client_ref, std::vector<std:
                 return;
             }
 
-            if(!channel.isOperator(target))
+            if(!channel.isOperator(target) && channel.getTopicMode())
             {
-                std::string dest =  channel.getChannelName() + " " + target;     
-                //:<servername> <code>  <channel> <nick> <:message>          
+                std::string dest = target + " " + channel.getChannelName();
                 send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CHANOPRIVSNEEDED, dest, "You're not a channel operator");
+                // std::string dest =  channel.getChannelName() + " " + target;     
+                // //:<servername> <code>  <channel> <nick> <:message>          
+                // send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CHANOPRIVSNEEDED, dest, "You're not a channel operator");
                 return;
             }
             std::string topic;

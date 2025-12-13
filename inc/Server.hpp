@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:34:20 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 12:09:45 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 15:34:08 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ class Server{
       
       
       Channel&                                   findChannel(std::string& channel);
-      Channel&                                   createChannel(std::string& channel, std::string password);
+      Channel&                                   createChannel(std::string& channel);
       Client&                                    findUser(std::string&);
       std::string&                               get_password();
       std::string&                               get_Servername();

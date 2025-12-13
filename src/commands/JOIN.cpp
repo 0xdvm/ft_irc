@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:32:04 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 12:35:59 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 18:44:13 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
     }
     if (size_args >= 1 && args[0].at(0) != '#')
     {
-        send_irc_reply(client_ref, server_ref.get_password(), ERR_NOSUCHCHANNEL, target, "No such channel");
+        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");
         return;
     }
     if (size_args == 1)
@@ -39,7 +39,7 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         {
             Channel& channel = server_ref.findChannel(args[0]);
             // std::cout << "Ja existe este canal" << std::endl;
-            if (channel.hasPassword())
+            if (channel.getKeyMode())
             {
                 send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target + " " + channel.getChannelName(), "Cannot join channel (+k) - bad key");
                 return;
@@ -54,13 +54,13 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             else
                 send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "");
             send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
-            send_irc_reply(client_ref, server_ref.get_password(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
         }
         catch(const std::exception& e)
         {            
-            Channel& channel =  server_ref.createChannel(args[0], "");
+            Channel& channel =  server_ref.createChannel(args[0]);
             // std::cout << "Nao existe este canal" << std::endl;
-            if (channel.hasPassword())
+            if (channel.getKeyMode())
             {
                 send_irc_reply(client_ref, server_ref.get_Servername(), ERR_BADCHANNELKEY, target + " " + channel.getChannelName(), "Cannot join channel (+k) - bad key");
                 return;
@@ -76,7 +76,7 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                 send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "");
             
             send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
-            send_irc_reply(client_ref, server_ref.get_password(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
         }
     }
     else
@@ -94,17 +94,31 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                 return;
             } 
             channel.joinChannel(client_ref);
+            if (channel.hasTopic())
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), channel.getTopic());
+            else
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "");
+            
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
             
         }
         catch(const std::exception& e)
         {            
-            Channel &channel =  server_ref.createChannel(args[0], args[1]);
+            Channel &channel =  server_ref.createChannel(args[0]);
 
             if (channel.isMember(client_ref.getNickname()))
             {
                 return;
             } 
             channel.joinChannel(client_ref);
+            if (channel.hasTopic())
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), channel.getTopic());
+            else
+                send_irc_reply(client_ref, server_ref.get_Servername(), RPL_TOPIC, target + " " + channel.getChannelName(), "");
+            
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_NAMREPLY, target + " = " + channel.getChannelName(), channel.getListmember());
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_ENDOFNAMES, target + " " + channel.getChannelName(), "End of NAMES list");
         }
     }
 }

@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 12:12:13 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 16:33:02 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,18 +102,18 @@ Channel& Server::findChannel(std::string& channel)
     throw std::runtime_error("Channel not found");
 }
 
-Channel& Server::createChannel(std::string& channel, std::string password)
+Channel& Server::createChannel(std::string& channel)
 {
     // this->channels[channel] = Channel (channel);
-    if (password.empty())
-    {
+    // if (password.empty())
+    // {
         Channel *chl = new Channel(channel);
         this->_channels.push_back(chl);
         return (*chl);    
-    }
-    Channel *chl = new Channel(channel, password);
-    this->_channels.push_back(chl);
-    return (*chl);    
+    // }
+    // Channel *chl = new Channel(channel, password);
+    // this->_channels.push_back(chl);
+    // return (*chl);    
 }
 
 void Server::removeChannel(std::string channel)
@@ -294,8 +294,7 @@ void Server::run_server()
     std::cout << std::endl << "Close server..." << std::endl;
 
     //Desconecta os clientes conectados ao servidor...
-    for (std::map<int, Client>::iterator it = list_clients.begin(); it != list_clients.end(); ++it)
-        close(it->first);
+    for (std::map<int, Client>::iterator it = list_clients.begin(); it != list_clients.end(); ++it){close(it->first);}
     
     freeaddrinfo(res);
     close(epoll_fd);
