@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 09:47:27 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/09 12:54:07 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 12:37:04 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,17 @@ PRIVMSG::PRIVMSG(): Command(2){}
 
 PRIVMSG::~PRIVMSG(){}
 
-void PRIVMSG::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
+void PRIVMSG::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args)
+{
     int size_args = args.size();
     
-    if (size_args != this->get_num_args()){
+    if (size_args != this->get_num_args())
+    {
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, client_ref.getNickname(), "Not enough parameters");
         return;
     }
-    if (args[0].at(0) != '#'){
+    if (args[0].at(0) != '#')
+    {
         
         try
         {

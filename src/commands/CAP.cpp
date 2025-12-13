@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 20:26:26 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/17 12:21:35 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 12:16:29 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,22 @@
 
 CAP::CAP(): Command(1){}
 
-CAP::~CAP(){}
-
-void CAP::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
+void CAP::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args)
+{
     int size_args = args.size();
     std::string target = "*";
     
-    if (client_ref.hasNick()){
+    if (client_ref.hasNick())
+    {
         target = client_ref.getNickname();
     }
-    if (size_args == 0){
+    if (size_args == 0)
+    {
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Not enough parameters");
         return;
     }
-    if (args[0].compare("LS") != 0 && args[0].compare("ACK") != 0 && args[0].compare("REQ") != 0){
+    if (args[0].compare("LS") != 0 && args[0].compare("ACK") != 0 && args[0].compare("REQ") != 0)
+    {
         return;
     }
     send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Capabilities not supported");

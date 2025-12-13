@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:32:04 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/09 12:33:03 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 12:35:59 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,6 @@
 JOIN::JOIN(): Command(2) {}
 
 JOIN::~JOIN(){}
-
-void JOIN::showInfo()
-{
-    
-}
 
 void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args)
 {

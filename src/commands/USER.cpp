@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/15 16:22:27 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/17 10:38:00 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 12:37:36 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,15 @@ USER::USER(): Command(4){}
 
 USER::~USER(){}
 
-bool USER::isValidUsername(std::string& username){
+bool USER::isValidUsername(std::string& username)
+{
     int i = 0;
 
-    while (username[i]){
+    while (username[i])
+    {
         if (username[i] != '_' && username[i] != '-' && !isdigit(username[i]) 
-            && !((username[i] >= 'A' && username[i] <= 'Z') || (username[i] >= 'a' && username[i] <= 'z'))){
+            && !((username[i] >= 'A' && username[i] <= 'Z') || (username[i] >= 'a' && username[i] <= 'z')))
+        {
                 return (false);
         }
         i++;
@@ -30,11 +33,13 @@ bool USER::isValidUsername(std::string& username){
     return (true);
 }
 
-bool USER::isValidRealname(std::string& realname){
+bool USER::isValidRealname(std::string& realname)
+{
     int i = 0;
 
     while (realname[i]){
-        if ((realname[i] >= 'A' && realname[i] <= 'Z') || (realname[i] >= 'a' && realname[i] <= 'z')){
+        if ((realname[i] >= 'A' && realname[i] <= 'Z') || (realname[i] >= 'a' && realname[i] <= 'z'))
+        {
             return (true);
         }
         i++;
@@ -42,30 +47,37 @@ bool USER::isValidRealname(std::string& realname){
     return (false);
 }
 
-void USER::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
+void USER::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args)
+{
     int size_args = args.size();
     std::string target = "*";
     
-    if (client_ref.hasNick()){
+    if (client_ref.hasNick())
+    {
         target = client_ref.getNickname();
     }
-    if (size_args < this->get_num_args()){
+    if (size_args < this->get_num_args())
+    {
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Not enough parameters");
         return;
     }
-    if (!client_ref.hasPass() || !client_ref.hasNick()){
+    if (!client_ref.hasPass() || !client_ref.hasNick())
+    {
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTREGISTERED, "USER", "You have not registered");
         return;
     }
-    if (!this->isValidUsername(args[0])){
+    if (!this->isValidUsername(args[0]))
+    {
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_PASSWDMISMATCH, args[0], "Invalid username");
         return;
     }
-    if (args[3].at(0) != ':' || !this->isValidRealname(args[3])){
+    if (args[3].at(0) != ':' || !this->isValidRealname(args[3]))
+    {
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_PASSWDMISMATCH, args[3], "Invalid realname");
         return;
     }
-    if (client_ref.hasUser()){
+    if (client_ref.hasUser())
+    {
         target = client_ref.getNickname();
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_ALREADYREGISTERED, target, "You may not reregister");
         return;

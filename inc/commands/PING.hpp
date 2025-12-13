@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:45:41 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/17 19:47:42 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 12:34:57 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ class PING: public Command{
     public:
         PING();
         ~PING();
-        void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
+        
+        void            run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
 };
 
 #endif

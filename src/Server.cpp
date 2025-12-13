@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/27 08:55:06 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 12:12:13 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,30 +42,37 @@ Server::~Server()
     this->_channels.clear();
 }
 
-void Server::handle_monitoring(int sigint){
+void Server::handle_monitoring(int sigint)
+{
     (void)sigint;
     Server::_monitoring = false;
 }
 
-Client& Server::get_client(int fd){
+Client& Server::get_client(int fd)
+{
     return (this->list_clients[fd]);
 }
 
-std::string& Server::get_password(){
+std::string& Server::get_password()
+{
     return (this->_password);
 }
-std::string& Server::get_Servername(){
+std::string& Server::get_Servername()
+{
     return (this->_servername);
 }
 
-std::map<int, Client> Server::getListClient(){
+std::map<int, Client> Server::getListClient()
+{
     return (this->list_clients);
 }
-std::list<Channel*>& Server::getListChannel(){
+std::list<Channel*>& Server::getListChannel()
+{
     return(this->_channels);
 }
 
-Client& Server::findUser(std::string& nickname){
+Client& Server::findUser(std::string& nickname)
+{
     std::map<int, Client>::iterator it = this->list_clients.begin();
 
     while (it != this->list_clients.end())
@@ -79,7 +86,8 @@ Client& Server::findUser(std::string& nickname){
     throw std::runtime_error("User not found");
 }
 
-Channel& Server::findChannel(std::string& channel){
+Channel& Server::findChannel(std::string& channel)
+{
     std::list< Channel*>::iterator it;
 
     it = this->_channels.begin();
@@ -94,10 +102,11 @@ Channel& Server::findChannel(std::string& channel){
     throw std::runtime_error("Channel not found");
 }
 
-Channel& Server::createChannel(std::string& channel, std::string password){
+Channel& Server::createChannel(std::string& channel, std::string password)
+{
     // this->channels[channel] = Channel (channel);
-    if (password.empty()){
-        
+    if (password.empty())
+    {
         Channel *chl = new Channel(channel);
         this->_channels.push_back(chl);
         return (*chl);    
@@ -107,7 +116,8 @@ Channel& Server::createChannel(std::string& channel, std::string password){
     return (*chl);    
 }
 
-void Server::removeChannel(std::string channel){
+void Server::removeChannel(std::string channel)
+{
     std::list< Channel*>::iterator it;
 
     it = this->_channels.begin();
@@ -125,14 +135,14 @@ void Server::removeChannel(std::string channel){
     }
 }
 
-void Server::read_client(char* buffer, int size_buf, Client& client) {
+void Server::read_client(char* buffer, int size_buf, Client& client)
+{
     // Adiciona dados recebidos ao buffer do cliente
     client.buffer.append(buffer, size_buf);
 
     size_t pos;
-    while ((pos = client.buffer.find("\r\n")) != std::string::npos 
-    // || (pos = client.buffer.find("\n")) != std::string::npos
-    ) 
+    while ((pos = client.buffer.find("\r\n")) != std::string::npos) 
+    // || (pos = client.buffer.find("\n")) != std::string::npos)
     {
         // Extrai a mensagem até o final de linha
         std::string message = client.buffer.substr(0, pos);
@@ -146,7 +156,8 @@ void Server::read_client(char* buffer, int size_buf, Client& client) {
     }
 }
 
-void Server::run_server(){
+void Server::run_server()
+{
     
     std::cout << "Start server..." << std::endl;
     struct addrinfo hints, *res, *p;
@@ -163,7 +174,8 @@ void Server::run_server(){
     
     getaddrinfo(NULL, this->_port.c_str(), &hints, &res);
     
-    for(p = res; p != NULL; p = p->ai_next){
+    for(p = res; p != NULL; p = p->ai_next)
+    {
         this->_server_fd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
         if (this->_server_fd == -1)
         {
@@ -226,7 +238,6 @@ void Server::run_server(){
             if (events[i].data.fd == this->_server_fd)
             {
                 int client_fd = accept(this->_server_fd, NULL, NULL);
-                
                 
                 if (client_fd < 0)
                 {

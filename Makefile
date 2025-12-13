@@ -6,7 +6,7 @@
 #    By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/12 20:57:56 by dvemba            #+#    #+#              #
-#    Updated: 2025/12/12 20:57:58 by dvemba           ###   ########.fr        #
+#    Updated: 2025/12/13 11:55:29 by dvemba           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,15 @@ SRC_DIR		= src/
 OBJ_DIR		= obj/
 INC_DIR		= inc/
 
-SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp Parser.cpp commands/Command.cpp commands/PASS.cpp utils.cpp commands/CAP.cpp commands/NICK.cpp commands/USER.cpp commands/MODE.cpp commands/PING.cpp commands/PRIVMSG.cpp  Channel.cpp commands/JOIN.cpp commands/PART.cpp commands/TOPIC.cpp commands/QUIT.cpp                                                                        
-HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp Parser.hpp commands/Command.hpp commands/PASS.hpp utils.hpp commands/CAP.hpp commands/NICK.hpp commands/USER.hpp commands/MODE.hpp commands/PING.hpp commands/PRIVMSG.hpp  Channel.hpp commands/JOIN.hpp commands/PART.hpp commands/TOPIC.hpp commands/QUIT.hpp
+SRC_FILES	= main.cpp IRC.cpp Validate.cpp Server.cpp Client.cpp Parser.cpp \
+				commands/Command.cpp commands/PASS.cpp utils.cpp commands/CAP.cpp commands/NICK.cpp \
+				commands/USER.cpp commands/MODE.cpp commands/PING.cpp commands/PRIVMSG.cpp  Channel.cpp \
+				commands/JOIN.cpp commands/PART.cpp commands/TOPIC.cpp commands/QUIT.cpp
+				                                                                        
+HEADERS		= IRC.hpp Validate.hpp Server.hpp Client.hpp Parser.hpp commands/Command.hpp \
+				commands/PASS.hpp utils.hpp commands/CAP.hpp commands/NICK.hpp commands/USER.hpp \
+				commands/MODE.hpp commands/PING.hpp commands/PRIVMSG.hpp  Channel.hpp commands/JOIN.hpp \
+				commands/PART.hpp commands/TOPIC.hpp commands/QUIT.hpp
 
 SRC			= $(addprefix $(SRC_DIR), $(SRC_FILES))
 OBJ			= $(addprefix $(OBJ_DIR), $(SRC_FILES:.cpp=.o))
@@ -31,13 +38,15 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
 
+$(OBJ): $(INC)
+
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	@mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	
 $(OBJ_DIR)commands/%.o: $(SRC_DIR)commands/%.cpp
 	@mkdir -p $(OBJ_DIR)commands
-	$(CXX) $(CXXFLAGS) -I$(INC_DIR) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 	
 clean:
 	rm -rf $(OBJ_DIR)
