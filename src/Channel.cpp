@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/09 11:43:59 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 21:30:08 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,39 @@
 #include "../inc/utils.hpp"
 #include <sstream>
 
-Channel::Channel() : _channelName(""), _password(""), _topic(""), _topic_by(""), _hasPassword(false), _hasTopic(false), _memberNum(0), _topic_time(0) {}
+Channel::Channel() : 
+            _channelName(""), 
+            _password(""), 
+            _topic(""), 
+            _topic_by(""), 
+            
+            _topic_mode(false),
+            _invite_mode(false),
+            _key_mode(false),
+            _limit_mode(false), 
+            
+            _hasPassword(false), 
+            _hasTopic(false), 
+            _memberNum(0), 
+            _topic_time(0) {}
 
-Channel::Channel(std::string channelName):_channelName(channelName), _password(""), _topic(""), _topic_by(""), _hasPassword(false), _hasTopic(false), _memberNum(0), _topic_time(0){}
+Channel::Channel(std::string channelName):
+            _channelName(channelName), 
+            _password(""), 
+            _topic(""), 
+            _topic_by(""),
+            
+            _topic_mode(false),
+            _invite_mode(false),
+            _key_mode(false),
+            _limit_mode(false), 
+            
+            // _hasPassword(false), 
+            _hasTopic(false), 
+            _memberNum(0), 
+            _topic_time(0){}
 
-Channel::Channel(std::string channelName, std::string password):_channelName(channelName), _password(password), _topic(""), _topic_by(""), _hasPassword(true), _hasTopic(false), _memberNum(0), _topic_time(0){}
+// Channel::Channel(std::string channelName, std::string password):_channelName(channelName), _password(password), _topic(""), _topic_by(""), _hasPassword(true), _hasTopic(false), _memberNum(0), _topic_time(0){}
 
 Channel::~Channel(){}
 
@@ -147,6 +175,85 @@ void Channel::setTopicTime(long int time)
 {
     this->_topic_time = time;
 }
+void Channel::executeMode(std::string type_mode, std::vector<std::string>::iterator &current_args, std::vector<std::string>::iterator end_args)
+{
+    (void)current_args;
+    (void)end_args;
+    
+    if (type_mode == "+t" || type_mode == "-t")
+    {
+        if (type_mode == "+t" && !this->_topic_mode)
+        {
+            std::cout << "Ativou o modo" << std::endl;
+            this->_topic_mode = true;
+            this->_list_modes[type_mode] = "";
+        }
+        else if (type_mode == "-t" && this->_topic_mode)
+        {
+            this->_topic_mode = false;
+            this->_list_modes[type_mode] = "";
+        }
+    }
+    if (type_mode == "+k" || type_mode == "-k")
+    {
+        if (type_mode == "+k")
+        {
+            if (current_args != end_args)
+            {
+                this->_password = (*current_args);
+                this->_key_mode = true;
+                this->_list_modes[type_mode] = (*current_args);
+                current_args++;
+            }
+        }
+        else if (type_mode == "-k" && this->_key_mode)
+        {
+            this->_key_mode = false;
+            this->_list_modes[type_mode] = "";
+        }
+    }
+}
+void Channel::showModes()
+{
+    std::string list_modes;
+    std::string list_args;
+    int signal = 0;
+
+    std::map<std::string, std::string>::iterator it = this->_list_modes.begin();
+    while (it != this->_list_modes.end())
+    {
+        std::cout << "mode: " << (*it).first.at(1) << std::endl;
+        if ((*it).first.at(0) == '+')
+        {
+            if (signal == 0)
+            {
+                list_modes.append("+");
+                signal = 1;
+            }
+           list_modes.push_back((*it).first.at(1));
+        }
+        list_args.append(" ");
+        list_args += (*it).second;
+        it++;
+    }
+    signal = 0;
+    it = this->_list_modes.begin();
+    while (it != this->_list_modes.end())
+    {
+        if ((*it).first.at(0) == '-')
+        {
+            if (signal == 0)
+            {
+                list_modes.append("-");
+                signal = 1;
+            }
+            
+           list_modes.push_back((*it).first.at(1));
+        }
+        it++;
+    }
+    std::cout << list_modes << list_args << std::endl;
+}
 
 Client& Channel::getClient(std::string nickname)
 {
@@ -231,11 +338,6 @@ bool Channel::isMember(std::string nickname)
     return (false);
 }
         
-bool Channel::hasPassword()
-{
-    return (this->_hasPassword);
-}
-        
 bool Channel::hasTopic()
 {
     return (this->_hasTopic);
@@ -248,6 +350,22 @@ bool Channel::isCorrectpassword(std::string password)
         return (true);
     }
     return (false);
+}
+bool Channel::getTopicMode()
+{
+    return (this->_topic_mode);
+}
+bool Channel::getInviteMode()
+{
+    return (this->_invite_mode);
+}
+bool Channel::getKeyMode()
+{
+    return (this->_key_mode);
+}
+bool Channel::getLimitMode()
+{
+    return (this->_limit_mode);
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/09 11:26:58 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 20:44:34 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <iostream>
 #include <list>
+#include <vector>
 #include <map>
 #include "Client.hpp"
 
@@ -26,13 +27,19 @@ class Channel{
         std::string                             _topic_by;
         std::map<std::string, Client>           _memberList;
         std::list<std::string>                  _inviteList;
+        std::map<std::string, std::string>      _list_modes;
         
         //Modos
-        bool                                    _inviteOnly;
+        bool                                    _topic_mode;
+        bool                                    _invite_mode;
+        bool                                    _key_mode;
+        bool                                    _limit_mode;
+        
         bool                                    _hasPassword;
         bool                                    _hasTopic; 
         int                                     _userLimit;     
         int                                     _memberNum;
+        int                                     _limit_members;            
         long int                                _topic_time;
 
     public:
@@ -41,7 +48,9 @@ class Channel{
         Channel(std::string channelName, std::string password);
         ~Channel();
         
+        void                                    showModes();
         void                                    joinChannel(Client&);
+        void                                    executeMode(std::string type_mode, std::vector<std::string>::iterator &current_args, std::vector<std::string>::iterator end_args);
         void                                    addMember(std::string nickname, Client&);
         void                                    sendBroadcast(std::string command, std::string tosend, Client& client, bool isSendSelf);
         void                                    sendBroadcastQuit(std::string command, std::string tosend, Client& client, bool isSendSelf);
@@ -55,10 +64,15 @@ class Channel{
         void                                    setOperator(std::string nickname, std::string nickaname_dest, bool value);
         void                                    setTopicby(std::string nick);
         void                                    setTopicTime(long int time);
+        void                                    removeMember(std::string nickname);
+        
+        bool                                    getTopicMode();
+        bool                                    getInviteMode();
+        bool                                    getKeyMode();
+        bool                                    getLimitMode();
         
         bool                                    addOperator(std::string);
         bool                                    isMember(std::string nickname);
-        void                                    removeMember(std::string nickname);
         bool                                    isCorrectpassword(std::string password);
         bool                                    hasPassword();
         bool                                    hasTopic();
