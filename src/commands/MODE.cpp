@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:19:34 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/12 21:01:01 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/13 21:00:41 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,12 @@ void MODE::validateModes(std::vector<std::string> args)
 {
     std::vector<std::string>::iterator it = args.begin() + 1;
     std::string modes;
+    int i = 0;
     
     while (it != args.end())
     {
         std::string str = (*it);
-        if (!isValidOperator(str[0]))
+        if (!isValidOperator(str[0]) && i != 0)
         {
             this->arguments_modes.push_back(str);
         }
@@ -67,16 +68,28 @@ void MODE::validateModes(std::vector<std::string> args)
                     modes.push_back(str[i]);
                     this->list_modes.push_back(modes);
                 }
-                else
+                else if (str[0] == '-')
+                {                if (!isValidMode(str[i]))
                 {
+                    modes.clear();
+                    modes.push_back(str[i]);
+                    throw std::runtime_error(modes);
+                }
                     modes.clear();
                     modes.push_back('-');
                     modes.push_back(str[i]);
                     this->list_modes.push_back(modes);
                 }
+                else
+                {
+                    modes.clear();
+                    modes.push_back(str[0]);
+                    throw std::runtime_error(modes);                    
+                }
             }
         }
         it++;
+        i++;
     }
 }
 void MODE::run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args){
@@ -174,12 +187,16 @@ void MODE::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     return;           
                 }
             }
-            // {
-            //     for (int i = 0; i < static_cast<int>(list_modes.size()); i++)
-            //     {
-                    
-            //     }
-            // }
+            {
+                // int i_args = 0;
+                std::vector<std::string>::iterator i_args = arguments_modes.begin();
+                
+                for (std::vector<std::string>::iterator i = list_modes.begin(); i != list_modes.end(); i++)
+                {
+                    channel.executeMode((*i), i_args, arguments_modes.end());
+                }
+            }
+            channel.showModes();
         }
         catch(const std::exception& e){send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");}
         return;
