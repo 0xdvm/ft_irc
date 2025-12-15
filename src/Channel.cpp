@@ -6,13 +6,14 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 21:30:08 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/15 13:25:03 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/Channel.hpp"
 #include "../inc/utils.hpp"
 #include <sstream>
+#include <algorithm>
 
 Channel::Channel() : 
             _channelName(""), 
@@ -184,14 +185,17 @@ void Channel::executeMode(std::string type_mode, std::vector<std::string>::itera
     {
         if (type_mode == "+t" && !this->_topic_mode)
         {
-            std::cout << "Ativou o modo" << std::endl;
+            std::cout << "Ativou o modo t" << std::endl;
             this->_topic_mode = true;
-            this->_list_modes[type_mode] = "";
+            // this->_list_modes[type_mode] = "";
+            showModes(type_mode.at(0), type_mode.at(1), "");
         }
         else if (type_mode == "-t" && this->_topic_mode)
         {
+            std::cout << "Desativou o modo t" << std::endl;
             this->_topic_mode = false;
-            this->_list_modes[type_mode] = "";
+            // this->_list_modes[type_mode] = "";
+            showModes(type_mode.at(0), type_mode.at(1), "");
         }
     }
     if (type_mode == "+k" || type_mode == "-k")
@@ -202,57 +206,86 @@ void Channel::executeMode(std::string type_mode, std::vector<std::string>::itera
             {
                 this->_password = (*current_args);
                 this->_key_mode = true;
-                this->_list_modes[type_mode] = (*current_args);
+                // this->_list_modes[type_mode] = (*current_args);
+                showModes(type_mode.at(0), type_mode.at(1), (*current_args));
                 current_args++;
             }
         }
         else if (type_mode == "-k" && this->_key_mode)
         {
             this->_key_mode = false;
-            this->_list_modes[type_mode] = "";
+            // this->_list_modes[type_mode] = "";
+            showModes(type_mode.at(0), type_mode.at(1), "");
         }
     }
 }
-void Channel::showModes()
-{
-    std::string list_modes;
-    std::string list_args;
-    int signal = 0;
 
-    std::map<std::string, std::string>::iterator it = this->_list_modes.begin();
-    while (it != this->_list_modes.end())
+std::string Channel::getModeActive()
+{
+    std::string str;
+    std::list<char>::iterator it_mode;
+    std::list<std::string>::iterator it_args;
+    
+    for (it_mode = _list_mode.begin(); it_mode != _list_mode.end(); it_mode++)
     {
-        std::cout << "mode: " << (*it).first.at(1) << std::endl;
-        if ((*it).first.at(0) == '+')
-        {
-            if (signal == 0)
-            {
-                list_modes.append("+");
-                signal = 1;
-            }
-           list_modes.push_back((*it).first.at(1));
-        }
-        list_args.append(" ");
-        list_args += (*it).second;
-        it++;
+        str.push_back((*it_mode));
     }
-    signal = 0;
-    it = this->_list_modes.begin();
-    while (it != this->_list_modes.end())
+    for (it_args = _list_mode_args.begin(); it_args != _list_mode_args.end(); it_args++)
     {
-        if ((*it).first.at(0) == '-')
-        {
-            if (signal == 0)
-            {
-                list_modes.append("-");
-                signal = 1;
-            }
-            
-           list_modes.push_back((*it).first.at(1));
-        }
-        it++;
+        str.push_back(' ');
+        str.append((*it_args));
     }
-    std::cout << list_modes << list_args << std::endl;
+    this->_list_mode.clear();
+    this->_list_mode_args.clear();
+    return (str);
+}
+
+void Channel::showModes(char opt, char mode, std::string args)
+{
+    std::list<char>::iterator it_mode = _list_mode.begin();
+    
+    if (_list_mode.begin() == _list_mode.end())
+    {
+        _list_mode.push_back(opt);
+        _list_mode.push_back(mode);
+        if (!args.empty())
+        {
+            std::cout << "Tem argumento...." << std::endl;
+            _list_mode_args.push_back(args);
+        }
+        return;
+    }
+    // for (it_mode != _list_mode.end())
+    while (it_mode != _list_mode.end())
+    {
+        if (opt == (*it_mode))
+        {
+            // std::list<char>::iterator it = std::find(_list_mode.begin(), _list_mode.end(), opt);
+            for (std::list<char>::iterator i = it_mode; i != _list_mode.end(); i++)
+            {
+                if (opt == '+' && (*i) == '-'){
+                    _list_mode.insert(i, mode);
+                    if (!args.empty()){_list_mode_args.push_back(args);}
+                    return;
+                }
+            }
+            _list_mode.insert(_list_mode.end(), mode);
+            if (!args.empty()){_list_mode_args.push_back(args);}
+        }
+        else
+        {
+            std::list<char>::iterator it = std::find(_list_mode.begin(), _list_mode.end(), opt);
+            if (it == _list_mode.end())
+            {
+                _list_mode.push_back(opt);
+                _list_mode.push_back(mode);
+                if (!args.empty()){_list_mode_args.push_back(args);}
+                return;
+            }
+        }
+        it_mode++;
+    }
+    
 }
 
 Client& Channel::getClient(std::string nickname)
@@ -320,14 +353,6 @@ std::string Channel::getChannelName(){
 bool Channel::isMember(std::string nickname)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
-    
-    // it = this->_memberList.find(nickname);
-    
-    // if (it != this->_memberList.end())
-    // {
-    //     return (true);
-    // }
-    // std::map<Client>::iterator it = this->_memberList.begin();
     
     while (it != this->_memberList.end()){
     if (it->second.getNickname() == nickname){

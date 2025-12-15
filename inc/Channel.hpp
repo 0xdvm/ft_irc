@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 20:44:34 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/15 11:09:21 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ class Channel{
         std::string                             _topic_by;
         std::map<std::string, Client>           _memberList;
         std::list<std::string>                  _inviteList;
-        std::map<std::string, std::string>      _list_modes;
+        
+        std::list<char>                         _list_mode;
+        std::list<std::string>                  _list_mode_args;
         
         //Modos
         bool                                    _topic_mode;
@@ -48,7 +50,7 @@ class Channel{
         Channel(std::string channelName, std::string password);
         ~Channel();
         
-        void                                    showModes();
+        void                                    showModes(char opt, char mode, std::string args);
         void                                    joinChannel(Client&);
         void                                    executeMode(std::string type_mode, std::vector<std::string>::iterator &current_args, std::vector<std::string>::iterator end_args);
         void                                    addMember(std::string nickname, Client&);
@@ -83,6 +85,7 @@ class Channel{
         std::string                             getTopic();
         std::string                             getTopicby();
         std::string                             getTopicTime();
+        std::string                             getModeActive();
         int                                     getMemberNum();
 
 };
