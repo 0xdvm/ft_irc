@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:19:34 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 21:00:41 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/15 13:12:01 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,8 @@ void MODE::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     channel.executeMode((*i), i_args, arguments_modes.end());
                 }
             }
-            channel.showModes();
+            channel.sendBroadcast("MODE", channel.getModeActive(), client_ref, true);
+            // std::cout << "MODE: " << channel.getModeActive() << std::endl;
         }
         catch(const std::exception& e){send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");}
         return;
