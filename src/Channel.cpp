@@ -15,47 +15,49 @@
 #include <sstream>
 #include <algorithm>
 
-Channel::Channel() : 
-            _channelName(""), 
-            _password(""), 
-            _topic(""), 
-            _topic_by(""), 
-            
-            _topic_mode(false),
-            _invite_mode(false),
-            _key_mode(false),
-            _limit_mode(false), 
-            
-            _hasPassword(false), 
-            _hasTopic(false), 
-            _memberNum(0), 
-            _topic_time(0) {}
+Channel::Channel() : _channelName(""),
+                     _password(""),
+                     _topic(""),
+                     _topic_by(""),
 
-Channel::Channel(std::string channelName):
-            _channelName(channelName), 
-            _password(""), 
-            _topic(""), 
-            _topic_by(""),
-            
-            _topic_mode(false),
-            _invite_mode(false),
-            _key_mode(false),
-            _limit_mode(false), 
-            
-            // _hasPassword(false), 
-            _hasTopic(false), 
-            _memberNum(0), 
-            _topic_time(0){}
+                     _topic_mode(false),
+                     _invite_mode(false),
+                     _key_mode(false),
+                     _limit_mode(false),
+
+                     _hasPassword(false),
+                     _hasTopic(false),
+                     _memberNum(0),
+                     _topic_time(0)
+{
+}
+
+Channel::Channel(std::string channelName) : _channelName(channelName),
+                                            _password(""),
+                                            _topic(""),
+                                            _topic_by(""),
+
+                                            _topic_mode(false),
+                                            _invite_mode(false),
+                                            _key_mode(false),
+                                            _limit_mode(false),
+
+                                            // _hasPassword(false),
+                                            _hasTopic(false),
+                                            _memberNum(0),
+                                            _topic_time(0)
+{
+}
 
 // Channel::Channel(std::string channelName, std::string password):_channelName(channelName), _password(password), _topic(""), _topic_by(""), _hasPassword(true), _hasTopic(false), _memberNum(0), _topic_time(0){}
 
-Channel::~Channel(){}
+Channel::~Channel() {}
 
-void Channel::joinChannel(Client& client)
+void Channel::joinChannel(Client &client)
 {
-    
+
     this->addMember(client.getNickname(), client);
-    
+
     if (this->getMemberNum() == 1)
     {
         this->addOperator(client.getNickname());
@@ -65,9 +67,9 @@ void Channel::joinChannel(Client& client)
     // this->sendBroadcast()
 }
 
-void Channel::addMember(std::string nickname, Client& client)
+void Channel::addMember(std::string nickname, Client &client)
 {
-    this->_memberList[nickname] =  client;
+    this->_memberList[nickname] = client;
     this->_memberNum++;
 }
 
@@ -75,7 +77,8 @@ void Channel::removeMember(std::string nickname)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
 
-    while (it != this->_memberList.end()){
+    while (it != this->_memberList.end())
+    {
 
         if (it->second.getNickname().compare(nickname) == 0)
         {
@@ -91,7 +94,7 @@ void Channel::setMemberNum(int num)
     this->_memberNum = num;
 }
 
-void Channel::sendBroadcastQuit(std::string command, std::string tosend, Client& client, bool isSendSelf)
+void Channel::sendBroadcastQuit(std::string command, std::string tosend, Client &client, bool isSendSelf)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
 
@@ -105,7 +108,7 @@ void Channel::sendBroadcastQuit(std::string command, std::string tosend, Client&
     }
 }
 
-void Channel::sendBroadcast(std::string command, std::string tosend, Client& client, bool isSendSelf)
+void Channel::sendBroadcast(std::string command, std::string tosend, Client &client, bool isSendSelf)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
 
@@ -119,7 +122,7 @@ void Channel::sendBroadcast(std::string command, std::string tosend, Client& cli
     }
 }
 
-void  Channel::setTopic(std::string topic)
+void Channel::setTopic(std::string topic)
 {
     if (topic.compare(":") == 0)
     {
@@ -156,7 +159,7 @@ void Channel::removeInviteList(std::string nickname)
 void Channel::setInvite(std::string nickname, std::string nickaname_dest)
 {
     Client &client_dest = this->getClient(nickaname_dest);
-    Client & client_send = this->getClient(nickname);
+    Client &client_send = this->getClient(nickname);
     if (this->isOperator(nickname))
     {
         this->addInviteList(nickaname_dest);
@@ -169,7 +172,7 @@ void Channel::setInvite(std::string nickname, std::string nickaname_dest)
 }
 void Channel::setTopicby(std::string nick)
 {
-    this->_topic_by = nick; 
+    this->_topic_by = nick;
 }
 
 void Channel::setTopicTime(long int time)
@@ -180,7 +183,7 @@ void Channel::executeMode(std::string type_mode, std::vector<std::string>::itera
 {
     (void)current_args;
     (void)end_args;
-    
+
     if (type_mode == "+t" || type_mode == "-t")
     {
         if (type_mode == "+t" && !this->_topic_mode)
@@ -225,7 +228,7 @@ std::string Channel::getModeActive()
     std::string str;
     std::list<char>::iterator it_mode;
     std::list<std::string>::iterator it_args;
-    
+
     for (it_mode = _list_mode.begin(); it_mode != _list_mode.end(); it_mode++)
     {
         str.push_back((*it_mode));
@@ -243,7 +246,7 @@ std::string Channel::getModeActive()
 void Channel::showModes(char opt, char mode, std::string args)
 {
     std::list<char>::iterator it_mode = _list_mode.begin();
-    
+
     if (_list_mode.begin() == _list_mode.end())
     {
         _list_mode.push_back(opt);
@@ -263,14 +266,21 @@ void Channel::showModes(char opt, char mode, std::string args)
             // std::list<char>::iterator it = std::find(_list_mode.begin(), _list_mode.end(), opt);
             for (std::list<char>::iterator i = it_mode; i != _list_mode.end(); i++)
             {
-                if (opt == '+' && (*i) == '-'){
+                if ((opt == '+' && (*i) == '-') || (opt == '-' && (*i) == '+'))
+                {
                     _list_mode.insert(i, mode);
-                    if (!args.empty()){_list_mode_args.push_back(args);}
+                    if (!args.empty())
+                    {
+                        _list_mode_args.push_back(args);
+                    }
                     return;
                 }
             }
             _list_mode.insert(_list_mode.end(), mode);
-            if (!args.empty()){_list_mode_args.push_back(args);}
+            if (!args.empty())
+            {
+                _list_mode_args.push_back(args);
+            }
         }
         else
         {
@@ -279,16 +289,18 @@ void Channel::showModes(char opt, char mode, std::string args)
             {
                 _list_mode.push_back(opt);
                 _list_mode.push_back(mode);
-                if (!args.empty()){_list_mode_args.push_back(args);}
+                if (!args.empty())
+                {
+                    _list_mode_args.push_back(args);
+                }
                 return;
             }
         }
         it_mode++;
     }
-    
 }
 
-Client& Channel::getClient(std::string nickname)
+Client &Channel::getClient(std::string nickname)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
 
@@ -306,12 +318,13 @@ Client& Channel::getClient(std::string nickname)
 bool Channel::isOperator(std::string nickname)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
-    
+
     while (it != this->_memberList.end())
     {
         if (it->second.getNickname().compare(nickname) == 0)
         {
-            if (it->first.compare("@" + nickname) == 0){
+            if (it->first.compare("@" + nickname) == 0)
+            {
                 return (true);
             }
         }
@@ -323,22 +336,23 @@ bool Channel::isOperator(std::string nickname)
 bool Channel::addOperator(std::string nickname)
 {
     Client client;
-    
+
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
 
-    while (it != this->_memberList.end()){
+    while (it != this->_memberList.end())
+    {
 
         if (it->second.getNickname().compare(nickname) == 0)
         {
             client = it->second;
             this->_memberList.erase(it->first);
-            
+
             this->_memberList["@" + nickname] = client;
             return (true);
         }
         it++;
     }
-    return(false);
+    return (false);
 }
 
 int Channel::getMemberNum()
@@ -346,23 +360,26 @@ int Channel::getMemberNum()
     return (this->_memberNum);
 }
 
-std::string Channel::getChannelName(){
+std::string Channel::getChannelName()
+{
     return (this->_channelName);
 }
 
 bool Channel::isMember(std::string nickname)
 {
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
-    
-    while (it != this->_memberList.end()){
-    if (it->second.getNickname() == nickname){
+
+    while (it != this->_memberList.end())
+    {
+        if (it->second.getNickname() == nickname)
+        {
             return (true);
         }
         it++;
     }
     return (false);
 }
-        
+
 bool Channel::hasTopic()
 {
     return (this->_hasTopic);
@@ -393,16 +410,15 @@ bool Channel::getLimitMode()
     return (this->_limit_mode);
 }
 
-
 std::string Channel::getListmember()
 {
     if (this->_memberList.empty())
         return std::string();
-    
+
     std::map<std::string, Client>::iterator it = this->_memberList.begin();
     std::string list;
-    
-    while(it != this->_memberList.end())
+
+    while (it != this->_memberList.end())
     {
         if (it != this->_memberList.begin())
             list.push_back(' ');
