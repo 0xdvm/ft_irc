@@ -32,6 +32,19 @@ void send_irc_reply(Client& client_ref, std::string prefix, int code, std::strin
     std::cout << toSend;
 }
 
+bool isStringDigit(std::string str)
+{
+    int i = 0;
+    while (i < (int)str.length())
+    {
+        if (!isdigit(str[i]))
+        {
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
 
 // void send_irc_reply(Client& client_ref, std::string prefix, std::string command, std::string dest, const std::string& message){
 //     (void)client_ref;

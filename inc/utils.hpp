@@ -129,4 +129,5 @@ enum NumericReply
 
 void send_irc_reply(Client& client_ref, std::string prefix, std::string command, std::string dest, const std::string& message);
 void send_irc_reply(Client& client_ref, std::string prefix, int code, std::string dest, const std::string& message);
+bool isStringDigit(std::string str);
 #endif
