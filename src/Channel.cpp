@@ -14,6 +14,7 @@
 #include "../inc/utils.hpp"
 #include <sstream>
 #include <algorithm>
+#include <string>
 
 Channel::Channel() : _channelName(""),
                      _password(""),
@@ -55,16 +56,21 @@ Channel::~Channel() {}
 
 void Channel::joinChannel(Client &client)
 {
-
-    this->addMember(client.getNickname(), client);
-
-    if (this->getMemberNum() == 1)
+    if ((this->_limit_mode == false) || (this->_limit_mode == true && static_cast<int>(this->getListmember().length()) <= this->_limit_members) || (this->_limit_members == -1))
     {
-        this->addOperator(client.getNickname());
+        this->addMember(client.getNickname(), client);
+
+        if (this->getMemberNum() == 1)
+        {
+            this->addOperator(client.getNickname());
+        }
+        std::string tosend = "has joined " + this->getChannelName();
+        this->sendBroadcast("JOIN", tosend, client, true);
     }
-    std::string tosend = "has joined " + this->getChannelName();
-    this->sendBroadcast("JOIN", tosend, client, true);
-    // this->sendBroadcast()
+    else
+        send_irc_reply(client, client.getServername(), ERR_CHANNELISFULL, client.getNickname(), "Channel is full");
+
+// this->sendBroadcast()
 }
 
 void Channel::addMember(std::string nickname, Client &client)
@@ -181,9 +187,6 @@ void Channel::setTopicTime(long int time)
 }
 void Channel::executeMode(std::string type_mode, std::vector<std::string>::iterator &current_args, std::vector<std::string>::iterator end_args)
 {
-    (void)current_args;
-    (void)end_args;
-
     if (type_mode == "+t" || type_mode == "-t")
     {
         if (type_mode == "+t" && !this->_topic_mode)
@@ -218,6 +221,30 @@ void Channel::executeMode(std::string type_mode, std::vector<std::string>::itera
         {
             this->_key_mode = false;
             // this->_list_modes[type_mode] = "";
+            showModes(type_mode.at(0), type_mode.at(1), "");
+        }
+    }
+    if (type_mode == "+l" || type_mode == "-l")
+    {
+       
+        if (type_mode == "+l")
+        {
+            if (current_args != end_args)
+            {
+                if (!isStringDigit(*current_args) && std::atoi((*current_args).c_str()) > 0)
+                {
+                    this->_limit_members = std::atoi((*current_args).c_str());
+                    this->_limit_mode = true;
+                    // this->_list_modes[type_mode] = (*current_args);
+                    showModes(type_mode.at(0), type_mode.at(1), (*current_args));
+                }
+                current_args++;
+            }
+        }
+        else if (type_mode == "-l" && this->_limit_mode)
+        {
+            this->_limit_mode = false;
+            this->_limit_members = -1;
             showModes(type_mode.at(0), type_mode.at(1), "");
         }
     }
