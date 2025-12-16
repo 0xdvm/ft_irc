@@ -196,7 +196,11 @@ void MODE::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     channel.executeMode((*i), i_args, arguments_modes.end());
                 }
             }
-            channel.sendBroadcast("MODE", channel.getModeActive(), client_ref, true);
+            std::string list_active = channel.getModeActive(); 
+            if (!list_active.empty())
+            {
+                channel.sendBroadcast("MODE", list_active, client_ref, true);
+            }
             // std::cout << "MODE: " << channel.getModeActive() << std::endl;
         }
         catch(const std::exception& e){send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");}
