@@ -1,13 +1,12 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/15 11:09:21 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/17 14:51:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +17,9 @@
 #include <list>
 #include <vector>
 #include <map>
-#include "Client.hpp"
+
+class Server;
+class Client;
 
 class Channel{
     private:
@@ -61,7 +62,7 @@ class Channel{
         void                                    addInviteList(std::string nickname);
         void                                    removeInviteList(std::string nickanem);
         //                      
-        void                                    setInvite(std::string nickname, std::string nickaname_dest);
+        void                                    setInvite(std::string nickname, std::string nickaname_dest, Server& server_ref);
         void                                    setTopic(std::string topic);
         void                                    setUserlimit(std::string nickname, int limit);
         void                                    setOperator(std::string nickname, std::string nickaname_dest, bool value);
@@ -71,16 +72,18 @@ class Channel{
         
         bool                                    getTopicMode();
         bool                                    getInviteMode();
+        bool                                    isInvited(std::string nickname);
         bool                                    getKeyMode();
         bool                                    getLimitMode();
         
         bool                                    addOperator(std::string);
+        bool                                    removeOperator(std::string);
         bool                                    isMember(std::string nickname);
         bool                                    isCorrectpassword(std::string password);
         bool                                    hasPassword();
         bool                                    hasTopic();
         bool                                    isOperator(std::string nickname);
-        Client&                                 getClient(std::string nickname);
+        Client&                                 getClient(std::string nickname, Server& server_ref);
         std::string                             getChannelName();
         std::string                             getListmember();
         std::string                             getTopic();
@@ -90,80 +93,4 @@ class Channel{
         int                                     getMemberNum();
 
 };
-=======
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Channel.hpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/09 11:26:58 by dvemba           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef CHANNEL_HPP
-#define CHANNEL_HPP
-
-#include <iostream>
-#include <list>
-#include <map>
-#include "Client.hpp"
-
-class Channel{
-    private:
-        std::string                             _channelName;
-        std::string                             _password;
-        std::string                             _topic;
-        std::string                             _topic_by;
-        std::map<std::string, Client>           _memberList;
-        std::list<std::string>                  _inviteList;
-        
-        //Modos
-        bool                                    _inviteOnly;
-        bool                                    _hasPassword;
-        bool                                    _hasTopic; 
-        int                                     _userLimit;     
-        int                                     _memberNum;
-        long int                                _topic_time;
-
-    public:
-        Channel();
-        Channel(std::string channelName);
-        Channel(std::string channelName, std::string password);
-        ~Channel();
-        
-        void                                    joinChannel(Client&);
-        void                                    addMember(std::string nickname, Client&);
-        void                                    sendBroadcast(std::string command, std::string tosend, Client& client, bool isSendSelf);
-        void                                    sendBroadcastQuit(std::string command, std::string tosend, Client& client, bool isSendSelf);
-        void                                    setMemberNum(int num);
-        void                                    addInviteList(std::string nickname);
-        void                                    removeInviteList(std::string nickanem);
-        //                      
-        void                                    setInvite(std::string nickname, std::string nickaname_dest);
-        void                                    setTopic(std::string topic);
-        void                                    setUserlimit(std::string nickname, int limit);
-        void                                    setOperator(std::string nickname, std::string nickaname_dest, bool value);
-        void                                    setTopicby(std::string nick);
-        void                                    setTopicTime(long int time);
-        
-        bool                                    addOperator(std::string);
-        bool                                    isMember(std::string nickname);
-        void                                    removeMember(std::string nickname);
-        bool                                    isCorrectpassword(std::string password);
-        bool                                    hasPassword();
-        bool                                    hasTopic();
-        bool                                    isOperator(std::string nickname);
-        Client&                                 getClient(std::string nickname);
-        std::string                             getChannelName();
-        std::string                             getListmember();
-        std::string                             getTopic();
-        std::string                             getTopicby();
-        std::string                             getTopicTime();
-        int                                     getMemberNum();
-
-};
->>>>>>> main
 #endif
