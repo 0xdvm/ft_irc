@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 14:51:34 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/17 20:33:53 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ class Channel{
         std::string                             _topic_by;
         std::map<std::string, Client>           _memberList;
         std::list<std::string>                  _inviteList;
+        
+        std::list<char>                         _list_actives_modes;
+        std::list<std::string>                  _list_actives_modes_args;
         
         std::list<char>                         _list_mode;
         std::list<std::string>                  _list_mode_args;
@@ -61,8 +64,10 @@ class Channel{
         void                                    setMemberNum(int num);
         void                                    addInviteList(std::string nickname);
         void                                    removeInviteList(std::string nickanem);
-        //                      
-        void                                    setInvite(std::string nickname, std::string nickaname_dest, Server& server_ref);
+        //
+
+        void                                    setModeActive(char opt, char mode, std::string args);
+        void                                    setInvite(Client& nickname_dest, Client& client_send);
         void                                    setTopic(std::string topic);
         void                                    setUserlimit(std::string nickname, int limit);
         void                                    setOperator(std::string nickname, std::string nickaname_dest, bool value);
@@ -89,7 +94,9 @@ class Channel{
         std::string                             getTopic();
         std::string                             getTopicby();
         std::string                             getTopicTime();
-        std::string                             getModeActive();
+        std::string                             getCurrentMode(std::list<char> &list_modes, std::list<std::string> &args, bool clean);
+        std::string                             getActiveMode();
+        std::string                             getModeinstance();
         int                                     getMemberNum();
 
 };
