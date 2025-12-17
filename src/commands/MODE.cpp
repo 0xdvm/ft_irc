@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   MODE.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:19:34 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 11:32:12 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/17 20:06:01 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,9 @@ void MODE::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             }
             //mostra os modos ativos no canal corrente
             //
+            std::string list_active = channel.getActiveMode(); 
+            send_irc_reply(client_ref, server_ref.get_Servername(), RPL_CHANNELMODEIS, target + " " + channel.getChannelName(), list_active);
+            // channel.sendBroadcast("MODE", list_active, client_ref, true);
         }
         catch(const std::exception& e){send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");}
         return;
@@ -196,7 +199,7 @@ void MODE::run_command(Server& server_ref, Client& client_ref, std::vector<std::
                     channel.executeMode((*i), i_args, arguments_modes.end());
                 }
             }
-            std::string list_active = channel.getModeActive(); 
+            std::string list_active = channel.getModeinstance(); 
             if (!list_active.empty())
             {
                 channel.sendBroadcast("MODE", list_active, client_ref, true);

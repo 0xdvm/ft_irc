@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   PART.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 19:05:29 by cgouveia          #+#    #+#             */
-/*   Updated: 2025/12/17 15:08:57 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/17 17:47:56 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,11 @@ void PART::run_command(Server& server_ref, Client& client_ref, std::vector<std::
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Not enough paramters");
         return;
     }
-    if (size_args >= 1 && args[0].at(0) != '#')
-    {
-        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");
-        return;
-    }
+    // if (size_args >= 1 && args[0].at(0) != '#')
+    // {
+    //     send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");
+    //     return;
+    // }
 
     if (size_args == 1)
     {
