@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   JOIN.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:32:04 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 13:11:18 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/17 17:43:50 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void JOIN::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             {
                 return;
             }
-            if (channel.getInviteMode() == true && !channel.isInvited(client_ref.getNickname()))
+            if (channel.getInviteMode() && !channel.isInvited(client_ref.getNickname()))
             {
                 send_irc_reply(client_ref, server_ref.get_Servername(), ERR_INVITEONLYCHAN, target + " " + channel.getChannelName(), "Cannot join channel (+i) - invite only channel");
                 return;
