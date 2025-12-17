@@ -1,13 +1,12 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   QUIT.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 19:04:20 by cgouveia          #+#    #+#             */
-/*   Updated: 2025/12/13 12:35:19 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/17 11:30:47 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,30 +24,3 @@ class QUIT: public Command{
 };
 
 #endif
-=======
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   QUIT.hpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cgouveia <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/09 19:04:20 by cgouveia          #+#    #+#             */
-/*   Updated: 2025/12/09 19:04:24 by cgouveia         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef QUIT_HPP
-#define QUIT_HPP
-
-#include "Command.hpp"
-
-class QUIT: public Command{
-    public:
-        QUIT();
-        ~QUIT();
-        void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
-};
-
-#endif
->>>>>>> main

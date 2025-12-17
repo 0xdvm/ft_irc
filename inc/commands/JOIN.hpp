@@ -1,13 +1,12 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   JOIN.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:32:12 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 12:33:54 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/17 11:30:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,32 +22,4 @@ class JOIN: public Command{
         void                run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
 };
 
-=======
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   JOIN.hpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/24 15:32:12 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/25 16:43:00 by dvemba           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef JOIN_HPP
-#define JOIN_HPP
-
-#include "Command.hpp"
-
-class JOIN:public Command{
-    public:
-        JOIN();
-        ~JOIN();
-        
-        void showInfo();
-        void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
-};
-
->>>>>>> main
 #endif

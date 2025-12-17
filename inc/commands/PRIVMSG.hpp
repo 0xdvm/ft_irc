@@ -1,13 +1,12 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   PRIVMSG.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/19 09:44:32 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 12:35:10 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/17 11:30:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +22,4 @@ class PRIVMSG:  public Command{
     
     void          run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
 };
-=======
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   PRIVMSG.hpp                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/19 09:44:32 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/19 11:23:11 by dvemba           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef PRIVMSG_HPP
-#define PRIVMSG_HPP
-
-#include "Command.hpp"
-
-class PRIVMSG:  public Command{
-  public:
-    PRIVMSG();
-    ~PRIVMSG();
-    void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
-};
->>>>>>> main
 #endif

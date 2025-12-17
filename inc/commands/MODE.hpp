@@ -1,13 +1,12 @@
-<<<<<<< HEAD
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   MODE.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 19:17:53 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/13 12:34:45 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/17 11:30:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,28 +25,4 @@ class MODE: public Command{
         void validateModes(std::vector<std::string> args);
         void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
 };
-=======
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   MODE.hpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/17 19:17:53 by dvemba            #+#    #+#             */
-/*   Updated: 2025/11/17 19:21:58 by dvemba           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-#ifndef MODE_HPP
-#define MODE_HPP
-
-#include "Command.hpp"
-class MODE: public Command{
-    public:
-        MODE();
-        ~MODE();
-        void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
-};
->>>>>>> main
 #endif
