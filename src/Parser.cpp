@@ -27,6 +27,7 @@
 #include "../inc/commands/PART.hpp"
 #include "../inc/commands/QUIT.hpp"
 #include "../inc/commands/INVITE.hpp"
+#include "../inc/commands/KICK.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
     //Incializa a lista de commandos...
@@ -75,6 +76,7 @@ std::map<std::string, Command *> Parser::get_list_commands(){
     commands["PART"]    = new PART();
     commands["QUIT"]    = new QUIT();
     commands["INVITE"]  = new INVITE();
+    commands["KICK"]    = new KICK();
     return (commands);
 }
 

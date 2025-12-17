@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   INVITE.cpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cgouveia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/17 20:39:05 by cgouveia          #+#    #+#             */
+/*   Updated: 2025/12/17 20:39:11 by cgouveia         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../inc/commands/INVITE.hpp"
 #include "../../inc/utils.hpp"
 #include "../../inc/Channel.hpp"
@@ -47,10 +59,9 @@ void INVITE::run_command(Server& server_ref, Client& client_ref, std::vector<std
             std::cout << "Verificando se ja e membro do canal" << std::endl;
             if (channel.isMember(args[0]))
             {
-               // send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTONCHANNEL, target + " " + channel.getChannelName(), "You're not on that channel");
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_USERNOTINCHANNEL, target + " " + channel.getChannelName(), "The user is not on this channel.");
                 return;
             }
-            std::cout << "Convite enviado para " << args[0] << " no canal " << args[1] << std::endl;
             channel.setInvite(client_ref.getNickname(), args[0], server_ref);
         }
         catch(const std::exception& e)
