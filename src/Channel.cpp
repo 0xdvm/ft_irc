@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 21:00:35 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/18 10:54:49 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ Channel::Channel() : _channelName(""),
                      _hasTopic(false),
                      _memberNum(0),
                      _topic_time(0)
-{
-    _list_actives_modes.push_back('+');
-}
+{}
 
 Channel::Channel(std::string channelName) : _channelName(channelName),
                                             _password(""),
@@ -50,9 +48,7 @@ Channel::Channel(std::string channelName) : _channelName(channelName),
                                             _hasTopic(false),
                                             _memberNum(0),
                                             _topic_time(0)
-{
-    _list_actives_modes.push_back('+');
-}
+{}
 
 // Channel::Channel(std::string channelName, std::string password):_channelName(channelName), _password(password), _topic(""), _topic_by(""), _hasPassword(true), _hasTopic(false), _memberNum(0), _topic_time(0){}
 
@@ -236,7 +232,7 @@ void Channel::executeMode(std::string type_mode, std::vector<std::string>::itera
         {
             this->_key_mode = false;
             // this->_list_modes[type_mode] = "";
-            showModes(type_mode.at(0), type_mode.at(1), "");
+            showModes(type_mode.at(0), type_mode.at(1), "*");
         }
     }
     if (type_mode == "+l" || type_mode == "-l")
@@ -309,60 +305,56 @@ void Channel::executeMode(std::string type_mode, std::vector<std::string>::itera
         }
     }
 }
-std::string Channel::getActiveMode()
+std::string Channel::getModeString(bool showPass)
 {
-    return (this->getCurrentMode(_list_actives_modes, _list_actives_modes_args, false));
+    std::string mode = "+";
+    std::string args;
+    
+    if (this->getInviteMode())
+    {
+        mode.append("i");
+    }
+    if (this->getKeyMode())
+    {
+        mode.append("k");
+        args.append(" ");
+        if (showPass)
+            args.append(this->_password);
+        else
+           args.append("*"); 
+    }
+    if (this->getLimitMode())
+    {
+        mode.append("l");
+        std::stringstream ss;
+        ss << this->_limit_members;
+        args.append(" ");
+        args.append(ss.str());
+    }
+    if (this->getTopicMode())
+    {
+        mode.append("t");
+    }
+    return (mode + args);
 }
-std::string Channel::getModeinstance()
-{
-    return (this->getCurrentMode(_list_mode, _list_mode_args, true));
-}
-std::string Channel::getCurrentMode(std::list<char> &list_modes, std::list<std::string> &args, bool clean)
+std::string Channel::getCurrentMode()
 {
     std::string str;
     std::list<char>::iterator it_mode;
     std::list<std::string>::iterator it_args;
 
-    for (it_mode = list_modes.begin(); it_mode != list_modes.end(); it_mode++)
+    for (it_mode = _list_mode.begin(); it_mode != _list_mode.end(); it_mode++)
     {
         str.push_back((*it_mode));
     }
-    for (it_args = args.begin(); it_args != args.end(); it_args++)
+    for (it_args = _list_mode_args.begin(); it_args != _list_mode_args.end(); it_args++)
     {
         str.push_back(' ');
         str.append((*it_args));
     }
-    if (clean)
-    {
-        list_modes.clear();
-        args.clear();
-    }
+    _list_mode.clear();
+    _list_mode_args.clear();
     return (str);
-}
-void Channel::setModeActive(char opt, char mode, std::string args)
-{
-    (void)args;
-    if (opt == '+' && mode != 'o')
-    {
-        std::list<char>::iterator it = std::find(_list_actives_modes.begin(), _list_actives_modes.end(), mode);
-        if (it == _list_actives_modes.end())
-        {
-            _list_actives_modes.push_back(mode);
-            if (!args.empty())
-            {
-                // _list_mode_actives_args.push_back(args);
-                _list_actives_modes_args.push_back(args);
-            }
-        }
-    }
-    if (opt == '-' && mode != 'o')
-    {
-        std::list<char>::iterator it = std::find(_list_actives_modes.begin(), _list_actives_modes.end(), mode);
-        if (it != _list_actives_modes.end())
-        {
-            _list_actives_modes.erase(it);
-        }
-    }
 }
 void Channel::showModes(char opt, char mode, std::string args)
 {
@@ -370,13 +362,11 @@ void Channel::showModes(char opt, char mode, std::string args)
 
     if (_list_mode.begin() == _list_mode.end())
     {
-        std::cout << "opt: " << opt << std::endl;
-        setModeActive(opt, mode, args);
         _list_mode.push_back(opt);
         _list_mode.push_back(mode);
         if (!args.empty())
         {
-            std::cout << "Tem argumento...." << std::endl;
+            // std::cout << "Tem argumento...." << std::endl;
             _list_mode_args.push_back(args);
         }
         return;
@@ -392,20 +382,12 @@ void Channel::showModes(char opt, char mode, std::string args)
                 if ((opt == '+' && (*i) == '-') || (opt == '-' && (*i) == '+'))
                 {
                     _list_mode.insert(i, mode);  
-                    if (!args.empty())
-                    {
-                        _list_mode_args.push_back(args);
-                    }
-                    setModeActive(opt, mode, args);
+                    if (!args.empty()){_list_mode_args.push_back(args);}
                     return;
                 }
             }
             _list_mode.insert(_list_mode.end(), mode);
-            setModeActive(opt, mode, args);
-            if (!args.empty())
-            {
-                _list_mode_args.push_back(args);
-            }
+            if (!args.empty()){_list_mode_args.push_back(args);}
         }
         else
         {
@@ -414,12 +396,7 @@ void Channel::showModes(char opt, char mode, std::string args)
             {
                 _list_mode.push_back(opt);
                 _list_mode.push_back(mode);
-                
-                if (!args.empty())
-                {
-                    _list_mode_args.push_back(args);
-                }
-                setModeActive(opt, mode, args);
+                if (!args.empty()){_list_mode_args.push_back(args);}
                 return;
             }
         }

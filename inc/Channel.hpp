@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 20:33:53 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/18 10:53:48 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ class Channel{
         std::map<std::string, Client>           _memberList;
         std::list<std::string>                  _inviteList;
         
-        std::list<char>                         _list_actives_modes;
-        std::list<std::string>                  _list_actives_modes_args;
-        
         std::list<char>                         _list_mode;
         std::list<std::string>                  _list_mode_args;
         
@@ -43,8 +40,7 @@ class Channel{
         bool                                    _limit_mode;
         
         bool                                    _hasPassword;
-        bool                                    _hasTopic; 
-        int                                     _userLimit;     
+        bool                                    _hasTopic;     
         int                                     _memberNum;
         int                                     _limit_members;            
         long int                                _topic_time;
@@ -88,15 +84,14 @@ class Channel{
         bool                                    hasPassword();
         bool                                    hasTopic();
         bool                                    isOperator(std::string nickname);
-        Client&                                 getClient(std::string nickname, Server& server_ref);
         std::string                             getChannelName();
         std::string                             getListmember();
         std::string                             getTopic();
         std::string                             getTopicby();
         std::string                             getTopicTime();
-        std::string                             getCurrentMode(std::list<char> &list_modes, std::list<std::string> &args, bool clean);
-        std::string                             getActiveMode();
-        std::string                             getModeinstance();
+        std::string                             getCurrentMode();
+        std::string                             getModeString(bool showPass);
+        Client&                                 getClient(std::string nickname, Server& server_ref);
         int                                     getMemberNum();
 
 };
