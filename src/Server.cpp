@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/06 16:31:48 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 14:04:49 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/18 19:58:55 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ void Server::run_server()
     
     //Capturando o signal ctrl + c para sair do loop e encerrar adequadamente o programa.
     signal(SIGINT, Server::handle_monitoring);
+    signal(SIGPIPE, SIG_IGN);
 
     std::memset(&hints, 0, sizeof(hints));
     hints.ai_family = AF_INET;
