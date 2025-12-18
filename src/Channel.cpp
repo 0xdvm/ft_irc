@@ -17,6 +17,7 @@
 #include <sstream>
 #include <algorithm>
 #include <string>
+#include <sys/socket.h>
 
 Channel::Channel() : _channelName(""),
                      _password(""),
@@ -129,6 +130,23 @@ void Channel::sendBroadcast(std::string command, std::string tosend, Client &cli
         it++;
     }
 }
+
+void Channel::sendBroadcastKick(Client &source, Client &target, const std::string &reason)
+{
+    std::string msg =
+        ":" + source.userMask() +
+        " KICK " + this->getChannelName() +
+        " " + target.getNickname() +
+        " :" + reason + "\r\n";
+
+    for (std::map<std::string, Client>::iterator it = _memberList.begin();
+         it != _memberList.end(); ++it)
+    {
+        send(it->second.get_fd(), msg.c_str(), msg.length(), 0);
+        std::cout << msg;
+    }
+}
+
 
 void Channel::setTopic(std::string topic)
 {
