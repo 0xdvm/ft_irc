@@ -27,6 +27,7 @@
 #include "../inc/commands/PART.hpp"
 #include "../inc/commands/QUIT.hpp"
 #include "../inc/commands/INVITE.hpp"
+#include "../inc/commands/NOTICE.hpp"
 #include "../inc/commands/KICK.hpp"
 
 Parser::Parser(Server& server_ref, Client& client_ref){
@@ -64,19 +65,20 @@ Parser::~Parser(){
 std::map<std::string, Command *> Parser::get_list_commands(){
     std::map<std::string, Command*> commands;
 
-    commands["CAP"]     = new CAP();
-    commands["PASS"]    = new PASS();
-    commands["NICK"]    = new NICK();
-    commands["USER"]    = new USER();
-    commands["MODE"]    = new MODE();
-    commands["PING"]    = new PING();
-    commands["PRIVMSG"] = new PRIVMSG();
-    commands["JOIN"]    = new JOIN();
-    commands["TOPIC"]   = new TOPIC();
-    commands["PART"]    = new PART();
-    commands["QUIT"]    = new QUIT();
-    commands["INVITE"]  = new INVITE();
-    commands["KICK"]    = new KICK();
+    commands["CAP"]             = new CAP();
+    commands["PASS"]            = new PASS();
+    commands["NICK"]            = new NICK();
+    commands["USER"]            = new USER();
+    commands["MODE"]            = new MODE();
+    commands["PING"]            = new PING();
+    commands["PRIVMSG"]         = new PRIVMSG();
+    commands["JOIN"]            = new JOIN();
+    commands["TOPIC"]           = new TOPIC();
+    commands["PART"]            = new PART();
+    commands["QUIT"]            = new QUIT();
+    commands["INVITE"]          = new INVITE();
+    commands["NOTICE"]          = new NOTICE();
+    commands["KICK"]            = new KICK();
     return (commands);
 }
 

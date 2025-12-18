@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 14:51:34 by marvin           ###   ########.fr       */
+/*   Updated: 2025/12/18 10:53:48 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ class Channel{
         bool                                    _limit_mode;
         
         bool                                    _hasPassword;
-        bool                                    _hasTopic; 
-        int                                     _userLimit;     
+        bool                                    _hasTopic;     
         int                                     _memberNum;
         int                                     _limit_members;            
         long int                                _topic_time;
@@ -61,8 +60,10 @@ class Channel{
         void                                    setMemberNum(int num);
         void                                    addInviteList(std::string nickname);
         void                                    removeInviteList(std::string nickanem);
-        //                      
-        void                                    setInvite(std::string nickname, std::string nickaname_dest, Server& server_ref);
+        //
+
+        void                                    setModeActive(char opt, char mode, std::string args);
+        void                                    setInvite(Client& nickname_dest, Client& client_send);
         void                                    setTopic(std::string topic);
         void                                    setUserlimit(std::string nickname, int limit);
         void                                    setOperator(std::string nickname, std::string nickaname_dest, bool value);
@@ -83,13 +84,14 @@ class Channel{
         bool                                    hasPassword();
         bool                                    hasTopic();
         bool                                    isOperator(std::string nickname);
-        Client&                                 getClient(std::string nickname, Server& server_ref);
         std::string                             getChannelName();
         std::string                             getListmember();
         std::string                             getTopic();
         std::string                             getTopicby();
         std::string                             getTopicTime();
-        std::string                             getModeActive();
+        std::string                             getCurrentMode();
+        std::string                             getModeString(bool showPass);
+        Client&                                 getClient(std::string nickname, Server& server_ref);
         int                                     getMemberNum();
 
 };

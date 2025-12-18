@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   INVITE.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cgouveia <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/17 20:39:05 by cgouveia          #+#    #+#             */
-/*   Updated: 2025/12/17 20:39:11 by cgouveia         ###   ########.fr       */
+/*   Created: 2025/12/17 17:01:23 by dvemba            #+#    #+#             */
+/*   Updated: 2025/12/17 17:01:23 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,41 +28,37 @@ void INVITE::run_command(Server& server_ref, Client& client_ref, std::vector<std
         send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NEEDMOREPARAMS, target, "Not enough paramters");
         return;
     }
-    if (size_args >= 2 && args[1].at(0) != '#')
-    {
-        send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHCHANNEL, target, "No such channel");
-        return;
-    }
     if (size_args >= 2)
     {   
         try
         {
             Channel& channel = server_ref.findChannel(args[1]);
-             std::cout << "Ja existe este canal" << std::endl;
-            if (!channel.isMember(client_ref.getNickname()))
+            //  std::cout << "Ja existe este canal" << std::endl;
+            if (!channel.isMember(target))
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTONCHANNEL, target + " " + channel.getChannelName(), "You're not on that channel");
+                std::string dest = target + " " + channel.getChannelName();
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOTONCHANNEL, target, "You're not on that channel");
                 return;
             }
-            std::cout << "Verificando se o modo i esta ativo" << std::endl;
-            if (channel.getInviteMode() == true && !channel.isOperator(client_ref.getNickname()))
+            // std::cout << "Verificando se o modo i esta ativo" << std::endl;
+            if (channel.getInviteMode() && !channel.isOperator(target))
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CHANOPRIVSNEEDED, target + " " + channel.getChannelName(), "You're not channel operator");
+                std::string dest = target + " " + channel.getChannelName();
+                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_CHANOPRIVSNEEDED, dest, "You're not a channel operator");
                 return;
             }
-            std::cout << "Verificando se o nick existe" << std::endl;
-            if (server_ref.findClient(args[0]).getNickname().empty())
+
+            try
             {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHNICK, target + " " + args[0], "No such nick");
-                return;
+                Client &client = server_ref.findClient(args[0]);
+
+                if (channel.isMember(args[0])){return;}
+
+                channel.setInvite(client, client_ref);
+
             }
-            std::cout << "Verificando se ja e membro do canal" << std::endl;
-            if (channel.isMember(args[0]))
-            {
-                send_irc_reply(client_ref, server_ref.get_Servername(), ERR_USERNOTINCHANNEL, target + " " + channel.getChannelName(), "The user is not on this channel.");
-                return;
-            }
-            channel.setInvite(client_ref.getNickname(), args[0], server_ref);
+            catch(const std::exception& e){send_irc_reply(client_ref, server_ref.get_Servername(), ERR_NOSUCHNICK, target, "No such nick");}
+            
         }
         catch(const std::exception& e)
         {            
