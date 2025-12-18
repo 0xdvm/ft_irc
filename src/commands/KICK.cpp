@@ -60,10 +60,9 @@ void KICK::run_command(Server& server_ref, Client& client_ref, std::vector<std::
             }
             std::string tosend = "has left " + channel.getChannelName();
             // send_irc_reply(client_ref, client_ref.userMask(), "PART", channel.getChannelName(), tosend);
-            if (size_args == 2)
-                channel.sendBroadcast("KICK", "", client_ref, true);
-            else
-                channel.sendBroadcast("KICK", args[2], client_ref, true);
+            Client &target = server_ref.findClient(args[1]);
+            std::string reason = (size_args >= 3 && !args[2].empty())? args[2] : "kicked";
+            channel.sendBroadcastKick(client_ref, target, reason);
             channel.removeMember(args[1]);
             channel.removeInviteList(args[1]);
         }
