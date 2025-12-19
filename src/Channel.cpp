@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:28 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/18 10:54:49 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/19 10:39:51 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -577,4 +577,8 @@ std::string Channel::getTopicTime()
     std::stringstream ss;
     ss << this->_topic_time;
     return (ss.str());
+}
+std::map<std::string, Client>  Channel::getMember()
+{
+    return (this->_memberList);
 }

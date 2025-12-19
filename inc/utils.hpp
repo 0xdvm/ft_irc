@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/13 20:38:59 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/17 11:31:23 by marvin           ###   ########.fr       */
+/*   Created: 2025/12/19 10:18:25 by dvemba            #+#    #+#             */
+/*   Updated: 2025/12/19 10:18:25 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ enum NumericReply
     RPL_WHOISCHANNELS     = 319,
 
     RPL_WHOWASUSER        = 314,
+    RPL_ENDOFWHO          = 315,
     RPL_ENDOFWHOWAS       = 369,
 
     RPL_LISTSTART         = 321,
@@ -55,6 +56,7 @@ enum NumericReply
     RPL_INVITING          = 341,
     RPL_SUMMONING         = 342,
 
+    RPL_WHOREPLY          = 352,
     RPL_NAMREPLY          = 353,
     RPL_ENDOFNAMES        = 366,
 

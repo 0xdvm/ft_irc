@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 11:28:37 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/18 10:53:48 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/19 10:40:01 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ class Channel{
         std::string                             getCurrentMode();
         std::string                             getModeString(bool showPass);
         Client&                                 getClient(std::string nickname, Server& server_ref);
+        std::map<std::string, Client>          getMember();
         int                                     getMemberNum();
 
 };
