@@ -21,12 +21,13 @@ class IRC {
 	private:
 		
 		Validate				_validation;
+		std::string				_servername;
 		std::string				_port;
 		std::string				_password;
 		
 	public:
 		void					run(void);
-		IRC(const std::string&, const std::string&);
+		IRC(const std::string servername, const std::string&, const std::string&);
 };
 
 #endif // !IRC_HPP

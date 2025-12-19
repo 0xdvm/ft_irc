@@ -17,10 +17,11 @@
 
 #include "../inc/Server.hpp"
 
-IRC::IRC(const std::string &port, const std::string &password): _password(password) 
+IRC::IRC(const std::string servername, const std::string &port, const std::string &password): _password(password) 
 {
 	_validation.validatePortNumber(port);
 	this->_port = port;
+	this->_servername = servername;
 }
 void	IRC::run(void) 
 {

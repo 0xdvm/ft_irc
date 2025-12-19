@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 10:14:32 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/19 11:36:22 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/19 16:43:00 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ WHO::WHO(): Command(1){}
 
 WHO::~WHO(){}
 
-void who_channel(Server &server_ref, Client& client_ref, Channel channel)
+void WHO::who_channel(Server &server_ref, Client& client_ref, Channel channel)
 {
     std::map<std::string, Client> list = channel.getMember();
     std::map<std::string, Client>::iterator it = list.begin();

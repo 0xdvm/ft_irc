@@ -6,7 +6,7 @@
 /*   By: dvemba <dvemba@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/19 10:11:36 by dvemba            #+#    #+#             */
-/*   Updated: 2025/12/19 10:14:26 by dvemba           ###   ########.fr       */
+/*   Updated: 2025/12/19 16:43:18 by dvemba           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ class WHO: public Command
         WHO();
         ~WHO();
         void run_command(Server& server_ref, Client& client_ref, std::vector<std::string> args);
+        void who_channel(Server &server_ref, Client& client_ref, Channel channel);
 };
 
 #endif
