@@ -257,17 +257,9 @@ void Server::run_server()
                 
                 if (client_fd < 0)
                 {
-                    if (errno == EWOULDBLOCK || errno == EAGAIN) 
-                    {
-                        // Não há clientes ainda, continue o loop
-                        continue;
-                    } 
-                    else 
-                    {
-                        // Algum outro erro sério aconteceu
-                        perror("accept");
-                        continue;
-                    }
+                    // Algum erro sério aconteceu
+                    perror("accept");
+                    continue;
                 }
                 //Tornando o client nao bloqueante.
                 fcntl(client_fd, F_SETFL, O_NONBLOCK);
