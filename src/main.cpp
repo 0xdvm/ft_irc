@@ -19,38 +19,14 @@
 
 int	main(int ac, char **av) {
     /**/
-    std::string servername = "ircserv";
-    std::string port;
-    std::string pass;
 
-    if (ac == 3)
-    {
-        port = av[1];
-        pass = av[2];      
-    }
-    if (ac == 2 && std::string(av[1]) == ".conf")
-    {
-        try
-        {
-            std::map<std::string, std::string> list_conf;
-            list_conf = extract_conf(&av[1]);
-            servername = list_conf["SERVERNAME"];
-            port = list_conf["PORT"];
-            pass = list_conf["PASS"];
-        }
-        catch(const std::exception& e)
-        {
-            std::cerr << "Error: " << e.what() << '\n';
-            return (1);
-        }
-    }
-    else if (ac != 3)
+    if (ac != 3)
     {
         std::cout << "Wrong args\nRun: ./ircserv <port> <password>\n";
         return (1);
     }
 	try {
-		IRC irc(servername, port, pass);
+		IRC irc(("ircserv"), av[1], av[2]);
         irc.run();
 	} catch (const std::exception &e) {
         std::cerr << "Error: " << e.what() << "\n";
