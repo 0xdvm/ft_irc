@@ -17,9 +17,12 @@
 
 #include "../inc/Server.hpp"
 
-IRC::IRC(const std::string servername, const std::string &port, const std::string &password): _password(password) 
+IRC::IRC(const std::string servername, const std::string &port, const std::string &password)
 {
 	_validation.validatePortNumber(port);
+	if (password.empty()){throw std::runtime_error("Invalid Password!");}
+
+	this->_password = password;
 	this->_port = port;
 	this->_servername = servername;
 }

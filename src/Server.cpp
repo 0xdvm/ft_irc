@@ -188,7 +188,11 @@ void Server::run_server()
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_PASSIVE;
     
-    getaddrinfo(NULL, this->_port.c_str(), &hints, &res);
+    if (getaddrinfo(NULL, this->_port.c_str(), &hints, &res) != 0 )
+    {
+        perror("getaddrinfo");
+        return;
+    }
     
     for(p = res; p != NULL; p = p->ai_next)
     {
@@ -216,21 +220,35 @@ void Server::run_server()
     {
         freeaddrinfo(res);
         close(this->_server_fd);
-        throw std::runtime_error("bind");
+        throw std::runtime_error("It was not possible to perform the bind.");
     }
     
     //Tornando o socket do servidor nao bloqueante.
-    fcntl(this->_server_fd, F_SETFL, O_NONBLOCK);
+    if(fcntl(this->_server_fd, F_SETFL, O_NONBLOCK) == -1)
+    {
+        freeaddrinfo(res);
+        close(this->_server_fd);
+        perror("fcntl");
+        return;
+    }
 
     if (listen(this->_server_fd, 128) < 0)
     {
         freeaddrinfo(res);
         close(this->_server_fd);
-        throw std::runtime_error("listen");
+        throw std::runtime_error("It was not possible to perform the listen.");
     }
 
     //Criando um epoll para monitorar os clientes que causerem um evento.
     epoll_fd = epoll_create1(0);
+
+    if (epoll_fd == -1) 
+    {
+        freeaddrinfo(res);
+        close(this->_server_fd);
+        perror("epoll_create1");
+        return;
+    }
 
     //Criando um configuracao de monitoramento para o _server_fd.
     struct epoll_event ev;
@@ -247,7 +265,7 @@ void Server::run_server()
     {
         //Esperando sockets causarem eventos e retorna o numero de sockets que causarao eventos.
         int n = epoll_wait(epoll_fd, events, 100, -1);
-
+        
         for (int i = 0; i < n; i++)
         {
             // Se o evento foi feito para o servidor (quer dizer que um cliente tentou se conectar).
@@ -262,7 +280,10 @@ void Server::run_server()
                     continue;
                 }
                 //Tornando o client nao bloqueante.
-                fcntl(client_fd, F_SETFL, O_NONBLOCK);
+                if(fcntl(client_fd, F_SETFL, O_NONBLOCK) == -1){
+                    perror("fcntl");
+                    continue;
+                }
                 
                 struct epoll_event client_ev;
                 client_ev.data.fd = client_fd;
