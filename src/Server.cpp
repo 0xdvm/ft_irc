@@ -276,7 +276,13 @@ void Server::run_server()
                 if (client_fd < 0)
                 {
                     // Algum erro sério aconteceu
-                    perror("accept");
+                    if (errno == EMFILE || errno == ENFILE)
+                    {
+                        epoll_ctl(epoll_fd, EPOLL_CTL_DEL, this->_server_fd, NULL);
+                        this->_accept_blocked = true;
+                    }
+                    else
+                        perror("accept");
                     continue;
                 }
                 //Tornando o client nao bloqueante.
@@ -284,7 +290,6 @@ void Server::run_server()
                     perror("fcntl");
                     continue;
                 }
-                
                 struct epoll_event client_ev;
                 client_ev.data.fd = client_fd;
                 client_ev.events = EPOLLIN;
@@ -313,6 +318,14 @@ void Server::run_server()
                     this->list_clients.erase(fd);
                     epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
                     close(events[i].data.fd);
+                    if (this->_accept_blocked)
+                    {
+                        struct epoll_event ev;
+                        ev.data.fd = this->_server_fd;
+                        ev.events = EPOLLIN;
+                        epoll_ctl(epoll_fd, EPOLL_CTL_ADD, this->_server_fd, &ev);
+                        this->_accept_blocked = false;
+                    }
                     continue;
                 }
                 this->read_client(buffer, size_buf, this->get_client(fd));
