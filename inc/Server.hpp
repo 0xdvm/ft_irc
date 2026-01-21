@@ -28,7 +28,6 @@ class Server{
       std::map<int, Client>                     list_clients;
       std::list<Channel*>                       _channels;
       
-      bool                                      _accept_blocked;
       static bool                               _monitoring;
       static void                               handle_monitoring(int sigint);
       Client&                                   get_client(int fd);

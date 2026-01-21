@@ -312,31 +312,45 @@ void Server::run_server()
                 }
             }
             else
-            {// Se for outro evento qualquer (cliente enviou mensagem, cliente se desconectou do serivdor).
-
+            {
+                int fd = events[i].data.fd;
                 char buffer[1024];
-                //Le a mensagem enviada ao servidor.
-                int size_buf = recv(events[i].data.fd, buffer, sizeof(buffer), 0);
-                
-                //Se houver um erro ou desconecxao com o servidor.
-                int fd = events[i].data.fd; // use o fd correto
-                if (size_buf <= 0)
+
+                while (true)
                 {
-                    this->list_clients.erase(fd);
-                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, events[i].data.fd, NULL);
-                    close(events[i].data.fd);
-                    if (this->_accept_blocked)
+                    ssize_t size_buf = recv(fd, buffer, sizeof(buffer), 0);
+
+                    if (size_buf > 0)
                     {
-                        struct epoll_event ev;
-                        ev.data.fd = this->_server_fd;
-                        ev.events = EPOLLIN;
-                        epoll_ctl(epoll_fd, EPOLL_CTL_ADD, this->_server_fd, &ev);
-                        this->_accept_blocked = false;
+                        this->read_client(buffer, size_buf, this->get_client(fd));
+                        continue;
                     }
-                    continue;
+
+                    if (size_buf == 0)
+                    {
+                        // cliente fechou a conexão
+                        this->list_clients.erase(fd);
+                        epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+                        close(fd);
+                        break;
+                    }
+
+                    // size_buf < 0
+                    if (errno == EAGAIN || errno == EWOULDBLOCK)
+                    {
+                        // buffer esvaziado — leitura completa
+                        break;
+                    }
+
+                    // erro real
+                    perror("recv");
+                    this->list_clients.erase(fd);
+                    epoll_ctl(epoll_fd, EPOLL_CTL_DEL, fd, NULL);
+                    close(fd);
+                    break;
                 }
-                this->read_client(buffer, size_buf, this->get_client(fd));
             }
+
         }
     }
 
