@@ -10,11 +10,11 @@
 
 The main goal is to understand and apply:
 
-* Network programming with **TCP/IP**
-* The **sockets API** (socket, bind, listen, accept, recv, send)
-* I/O multiplexing with **epoll** (or poll/select)
-* Client–server architecture
-* The fundamentals of the IRC protocol (RFC 1459)
+- Network programming with **TCP/IP**
+- The **sockets API** (socket, bind, listen, accept, recv, send)
+- I/O multiplexing with **epoll** (or poll/select)
+- Client–server architecture
+- The fundamentals of the IRC protocol (RFC 1459)
 
 The server allows multiple clients to connect simultaneously, join channels, send private and channel messages, and manage users through standard IRC commands.
 
@@ -22,17 +22,17 @@ The server allows multiple clients to connect simultaneously, join channels, sen
 
 ## Features
 
-* Non‑blocking TCP server
-* Supports multiple simultaneous clients using **epoll**
-* Supports basic IRC commands:
+- Non‑blocking TCP server
+- Supports multiple simultaneous clients using **epoll**
+- Supports basic IRC commands:
 
-  * PASS, NICK, USER, QUIT
-  * JOIN, PART, PRIVMSG
-  * PING / PONG
-  * MODE (i,t,k,l,o), TOPIC, INVITE, KICK
-* Channel management (#channel)
-* Nickname validation
-* Proper error handling according to the IRC protocol
+  - PASS, NICK, USER, QUIT
+  - JOIN, PART, PRIVMSG
+  - PING / PONG
+  - MODE (i,t,k,l,o), TOPIC, INVITE, KICK
+- Channel management (#channel)
+- Nickname validation
+- Proper error handling according to the IRC protocol
 
 ---
 
@@ -150,46 +150,34 @@ ft_irc/
 
 ## Technical Choices
 
-* **Language:** C++
-* **Sockets:** POSIX API (IPv4/IPv6)
-* **Multiplexing:** epoll for high performance
-* **Architecture:**
-
-  * `Server` → manages sockets and the epoll loop
-  * `Client` → represents a connected user
-  * `Channel` → manages users inside a channel
-  * `Commands` → parses and executes IRC commands
+- **Language:** C++
+- **Sockets:** POSIX API (IPv4/IPv6)
+- **Multiplexing:** epoll for high performance
+- **Architecture:**
+  - `Server` → manages sockets and the epoll loop
+  - `Client` → represents a connected user
+  - `Channel` → manages users inside a channel
+  - `Commands` → parses and executes IRC commands
 
 ---
 
 ## Resources
 
 ### Classic References
-# ft_IRC
 
-*Este projeto foi criado como parte do currículo da 42 por cgouveia, dvemba.*
-
----
-
-## Descrição
-
-**ft_IRC** é um projeto em C++ que consiste na …- dvemba
-
-
-
-* RFC 1459 – Internet Relay Chat Protocol
-* Linux manual: `man epoll`, `man socket`
-* Beej’s Guide to Network Programming
-* cppreference – C++ standard library documentation
+- RFC 1459 – Internet Relay Chat Protocol
+- Linux manual: `man epoll`, `man socket`
+- Beej’s Guide to Network Programming
+- cppreference – C++ standard library documentation
 
 ### Use of AI
 
 AI (ChatGPT) was used for:
 
-* Understanding the IRC protocol and RFC 1459
-* Clarifying socket, epoll and non‑blocking I/O concepts
-* Supporting the architecture design (Server, Client, Channel, Commands)
-* Helping debug network errors and edge cases
+- Understanding the IRC protocol and RFC 1459
+- Clarifying socket, epoll and non‑blocking I/O concepts
+- Supporting the architecture design (Server, Client, Channel, Commands)
+- Helping debug network errors and edge cases
 
 All implementation decisions and the final code were produced and validated by the team.
 
