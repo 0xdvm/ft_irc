@@ -271,38 +271,45 @@ void Server::run_server()
             // Se o evento foi feito para o servidor (quer dizer que um cliente tentou se conectar).
             if (events[i].data.fd == this->_server_fd)
             {
-                int client_fd = accept(this->_server_fd, NULL, NULL);
-                
-                if (client_fd < 0)
+                while (true)
                 {
-                    // Algum erro sério aconteceu
-                    if (errno == EMFILE || errno == ENFILE)
+                    int client_fd = accept(this->_server_fd, NULL, NULL);
+                    
+                    if (client_fd == -1)
                     {
-                        epoll_ctl(epoll_fd, EPOLL_CTL_DEL, this->_server_fd, NULL);
-                        this->_accept_blocked = true;
-                    }
-                    else
+                        if (errno == EAGAIN || errno == EWOULDBLOCK)
+                            break; // acabou backlog
+
+                        if (errno == EMFILE || errno == ENFILE)
+                        {
+                            // NÃO remove server_fd do epoll
+                            // Apenas pare de aceitar agora
+                            break;
+                        }
+
                         perror("accept");
-                    continue;
-                }
-                //Tornando o client nao bloqueante.
-                if(fcntl(client_fd, F_SETFL, O_NONBLOCK) == -1){
-                    perror("fcntl");
-                    continue;
-                }
-                struct epoll_event client_ev;
-                client_ev.data.fd = client_fd;
-                client_ev.events = EPOLLIN;
-                epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &client_ev);
+                        break;
+                    }
+                    //Tornando o client nao bloqueante.
+                    if(fcntl(client_fd, F_SETFL, O_NONBLOCK) == -1){
+                        perror("fcntl");
+                        continue;
+                    }
+                    
+                    struct epoll_event client_ev;
+                    client_ev.data.fd = client_fd;
+                    client_ev.events = EPOLLIN;
+                    epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_fd, &client_ev);
 
-                //Criando um objecto Client.
-                Client client;
+                    //Criando um objecto Client.
+                    Client client;
 
-                //Setando o fd.
-                client.set_fd(client_fd);
-                
-                //Adicionando o client na lista dos clientes.
-                this->list_clients[client_fd] = client;
+                    //Setando o fd.
+                    client.set_fd(client_fd);
+                    
+                    //Adicionando o client na lista dos clientes.
+                    this->list_clients[client_fd] = client;
+                }
             }
             else
             {// Se for outro evento qualquer (cliente enviou mensagem, cliente se desconectou do serivdor).
